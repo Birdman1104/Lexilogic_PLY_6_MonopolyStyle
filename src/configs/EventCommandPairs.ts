@@ -3,16 +3,10 @@ import { BoardEvents, KeyboardEvents, MainGameEvents, TakeMe } from '../events/M
 import { AdModelEvents, GameModelEvents } from '../events/ModelEvents';
 import {
     onAdStatusUpdateCommand,
-    onBoardPointerDownCommand,
-    onBoardPointerUpCommand,
-    onCardCheckMarkCompleteCommand,
     onCardClickCommand,
     onGameStateUpdateCommand,
     onKeyClickedCommand,
     onMainViewReadyCommand,
-    onRightsUpdateCommand,
-    onWrongAnimationCompleteCommand,
-    onWrongsUpdateCommand,
     resizeCommand,
     takeToStoreCommand,
 } from './Commands';
@@ -42,38 +36,13 @@ const eventCommandPairs = Object.freeze([
         event: BoardEvents.CardClick,
         command: onCardClickCommand,
     },
-
     {
         event: KeyboardEvents.KeyClicked,
         command: onKeyClickedCommand,
     },
     {
-        event: BoardEvents.CheckMarkAnimationComplete,
-        command: onCardCheckMarkCompleteCommand,
-    },
-    {
-        event: BoardEvents.WrongAnimationComplete,
-        command: onWrongAnimationCompleteCommand,
-    },
-    {
-        event: GameModelEvents.WrongsUpdate,
-        command: onWrongsUpdateCommand,
-    },
-    {
         event: GameModelEvents.StateUpdate,
         command: onGameStateUpdateCommand,
-    },
-    {
-        event: GameModelEvents.RightsUpdate,
-        command: onRightsUpdateCommand,
-    },
-    {
-        event: BoardEvents.PointerDown,
-        command: onBoardPointerDownCommand,
-    },
-    {
-        event: BoardEvents.PointerUp,
-        command: onBoardPointerUpCommand,
     },
     {
         event: MainGameEvents.Resize,

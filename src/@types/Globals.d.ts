@@ -22,3 +22,8 @@ type SpriteConfig = {
     anchor?: PIXI.Point;
     position?: PIXI.Point;
 };
+
+type CardConfig = {
+    question: string;
+    answers: string[];
+};

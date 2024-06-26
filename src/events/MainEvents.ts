@@ -12,8 +12,6 @@ export const BoardEvents = {
     CardClick: 'BoardEventsCardClick',
     CheckMarkAnimationComplete: 'BoardEventsCheckMarkAnimationComplete',
     WrongAnimationComplete: 'BoardEventsWrongAnimationComplete',
-    PointerDown: 'BoardEventsPointerDown',
-    PointerUp: 'BoardEventsPointerUp',
 };
 
 export const TakeMe = {

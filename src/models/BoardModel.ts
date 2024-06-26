@@ -1,3 +1,4 @@
+import { CARD_CONFIG } from '../configs/CardsConfig';
 import { CardModel } from './CardModel';
 import { ObservableModel } from './ObservableModel';
 
@@ -19,12 +20,12 @@ export class BoardModel extends ObservableModel {
     }
 
     public initialize(): void {
-        // const tempArr: CardModel[] = [];
-        // for (let i = 0; i < CARD_CONFIG.length; i++) {
-        //     for (let j = 0; j < CARD_CONFIG[i].length; j++) {
-        //         tempArr.push(new CardModel(CARD_CONFIG[i][j], i, j));
-        //     }
-        // }
-        // this._cards = tempArr;
+        const tempArr: CardModel[] = [];
+        for (let i = 0; i < CARD_CONFIG.length; i++) {
+            for (let j = 0; j < CARD_CONFIG[i].length; j++) {
+                tempArr.push(new CardModel(CARD_CONFIG[i][j], i, j));
+            }
+        }
+        this._cards = tempArr;
     }
 }
