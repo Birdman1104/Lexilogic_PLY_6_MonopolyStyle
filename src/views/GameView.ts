@@ -1,11 +1,10 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
-import { BoardModelEvents, GameModelEvents, HintModelEvents } from '../events/ModelEvents';
+import { GameModelEvents, HintModelEvents } from '../events/ModelEvents';
 import { BoardModel } from '../models/BoardModel';
 import { CardModel } from '../models/CardModel';
 import { HintState } from '../models/HintModel';
-import { getViewByProperty } from '../utils';
 import { BoardView } from './BoardView';
 
 export class GameView extends PixiGrid {
@@ -19,8 +18,7 @@ export class GameView extends PixiGrid {
 
         lego.event
             .on(GameModelEvents.BoardUpdate, this.onBoardUpdate, this)
-            .on(HintModelEvents.StateUpdate, this.onHintStateUpdate, this)
-            .on(BoardModelEvents.ActiveCardUpdate, this.onActiveCardUpdate, this);
+            .on(HintModelEvents.StateUpdate, this.onHintStateUpdate, this);
         this.build();
     }
 
@@ -52,9 +50,6 @@ export class GameView extends PixiGrid {
 
     private buildBoard() {
         this.board = new BoardView();
-        this.board.on('cardHideComplete', () => {
-            getViewByProperty('viewName', 'ForegroundView').hideKeyboard();
-        });
         this.setChild('board', this.board);
     }
 
@@ -63,6 +58,6 @@ export class GameView extends PixiGrid {
     }
 
     private onActiveCardUpdate(card: CardModel): void {
-        this.board.setActiveCard(card?.uuid);
+        // this.board.setActiveCard(card?.uuid);
     }
 }

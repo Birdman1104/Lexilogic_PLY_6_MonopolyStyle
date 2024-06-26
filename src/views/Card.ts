@@ -1,13 +1,15 @@
-import { Container, Graphics, Sprite, Text } from 'pixi.js';
+import { Container, Sprite, Text } from 'pixi.js';
+import { Images } from '../assets';
+import { DEFAULT_FONT } from '../configs/GameConfig';
+import { makeSprite } from '../utils';
+import { InputArea } from './InputArea';
 
 export class Card extends Container {
     private bkg: Sprite;
-    private titleText: Text;
-    private typedText: Text;
-    private typedTextCopy: Text;
+    private number: Text;
     private question: Text;
-    private indicator: Text;
-    private bkgTint: Graphics;
+    private inputArea: InputArea;
+
     private isSolved = false;
 
     constructor(private config) {
@@ -43,44 +45,48 @@ export class Card extends Container {
 
     private build(): void {
         this.buildBkg();
+        this.buildNumber();
+        this.buildQuestion();
+        this.buildInputArea();
     }
 
     private buildBkg(): void {
-        //
+        this.bkg = makeSprite({ texture: Images['game/question_bkg_1'] });
+        this.bkg.anchor.set(0.5, 0.5);
+        this.bkg.interactive = true;
+        // this.bkg.on('pointerdown', () => {
+        //     if (this.isSolved) return;
+        //     this.emit('card_clicked', this.config.title);
+        // });
+        this.addChild(this.bkg);
     }
 
-    private buildTitle(): void {
-        // this.titleText = new Text(this.config.title, { fontFamily: DEFAULT_FONT, fontSize: 32, fontWeight: 600 });
-        // this.titleText.anchor.set(0.5);
-        // this.titleText.position.set(0, -this.bkg.height / 2 + this.titleText.height);
-        // this.bkg.addChild(this.titleText);
+    private buildNumber(): void {
+        this.number = new Text(this.config.answersRemaining, {
+            fontFamily: DEFAULT_FONT,
+            fontSize: 64,
+            fontWeight: 600,
+        });
+        this.number.anchor.set(0.5);
+        this.number.position.set(0, -this.bkg.height / 2 + this.number.height);
+        this.bkg.addChild(this.number);
     }
 
-    private buildTypedText(): void {
-        // this.typedText = new Text('', { fontFamily: DEFAULT_FONT, fontSize: 32, fontWeight: 600 });
-        // this.typedText.anchor.set(0.5);
-        // this.typedText.position.set(0, -this.bkg.height / 2 + 85);
-        // this.bkg.addChild(this.typedText);
-    }
-
-    private buildIndicator(): void {
-        // this.indicator = new Text('I', { fontFamily: DEFAULT_FONT, fontSize: 48, fontWeight: 700, fill: '#999999' });
-        // this.indicator.anchor.set(0.5);
-        // this.indicator.position.set(0, -this.bkg.height / 2 + 85);
-        // this.indicator.visible = false;
-        // this.bkg.addChild(this.indicator);
+    private buildInputArea(): void {
+        this.inputArea = new InputArea();
+        this.inputArea.position.set(0, 45);
+        this.addChild(this.inputArea);
     }
 
     private buildQuestion(): void {
-        // if (!this.config.question) return;
-        // this.question = new Text(this.config.question, {
-        //     fontFamily: DEFAULT_FONT,
-        //     fontSize: 28,
-        //     fontWeight: 600,
-        //     align: 'center',
-        // });
-        // this.question.anchor.set(0.5);
-        // this.question.position.set(0, 45);
-        // this.bkg.addChild(this.question);
+        this.question = new Text(this.config.question, {
+            fontFamily: DEFAULT_FONT,
+            fontSize: 48,
+            fontWeight: 600,
+            align: 'center',
+        });
+        this.question.anchor.set(0.5);
+        this.question.position.set(0, 45);
+        this.bkg.addChild(this.question);
     }
 }

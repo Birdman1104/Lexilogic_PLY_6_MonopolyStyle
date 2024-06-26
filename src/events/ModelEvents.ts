@@ -7,7 +7,10 @@ export const AdModelEvents = {
 
 export const BoardModelEvents = { CardsUpdate: 'BoardModelCardsUpdate' };
 
-export const CardModelEvents = { CompletedUpdate: 'CardModelCompletedUpdate' };
+export const CardModelEvents = {
+    AnswersRemainingUpdate: 'CardModelAnswersRemainingUpdate',
+    CompletedUpdate: 'CardModelCompletedUpdate',
+};
 
 export const CtaModelEvents = { VisibleUpdate: 'CtaModelVisibleUpdate' };
 
