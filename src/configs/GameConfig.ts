@@ -1,6 +1,6 @@
 export const GAME_CONFIG = Object.freeze({
     HintOnIdle: 1, // Seconds
-    Hint: true,
+    Hint: false,
 
     // Параметры для разных версий
     // WrongsCount: 3, // количество допускаемых ошибок
