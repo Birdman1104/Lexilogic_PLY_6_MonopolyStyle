@@ -41,10 +41,21 @@ export class BoardModel extends ObservableModel {
         return this._cards.find((c) => c.uuid === uuid);
     }
 
-    public isRightAnswerTyped(): boolean {
+    public isRightAnswer(): boolean {
         const typedText = this.typedText.toLowerCase();
+        const guessedAnswers = this.activeCard?.guessedAnswers || [];
         const answers = this.activeCard?.rightAnswers.map((a) => a.toLowerCase()) || [];
-        return answers.includes(typedText);
+        return answers.includes(typedText) && !guessedAnswers.includes(typedText);
+    }
+
+    public isGuessedAnswer(): boolean {
+        const typedText = this.typedText.toLowerCase();
+        const guessedAnswers = this.activeCard?.guessedAnswers || [];
+        return guessedAnswers.includes(typedText);
+    }
+
+    public addAnswerToList(): void {
+        this.activeCard?.addToGuessedAnswers(this.typedText.toLowerCase());
     }
 
     public updateTypedText(char: string): void {
@@ -70,6 +81,11 @@ export class BoardModel extends ObservableModel {
         }
 
         this._activeCard = card;
+    }
+
+    public completeActiveCard(): void {
+        if (!this.activeCard) return;
+        this.activeCard.completed = true;
     }
 
     public clearActiveCard(): void {

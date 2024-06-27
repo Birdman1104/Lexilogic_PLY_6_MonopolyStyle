@@ -7,6 +7,8 @@ import {
     onGameStateUpdateCommand,
     onKeyClickedCommand,
     onMainViewReadyCommand,
+    onRightAnimationCompleteCommand,
+    onWrongAnimationCompleteCommand,
     resizeCommand,
     takeToStoreCommand,
 } from './Commands';
@@ -43,6 +45,14 @@ const eventCommandPairs = Object.freeze([
     {
         event: GameModelEvents.StateUpdate,
         command: onGameStateUpdateCommand,
+    },
+    {
+        event: BoardEvents.RightAnimationComplete,
+        command: onRightAnimationCompleteCommand,
+    },
+    {
+        event: BoardEvents.WrongAnimationComplete,
+        command: onWrongAnimationCompleteCommand,
     },
     {
         event: MainGameEvents.Resize,

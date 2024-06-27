@@ -96,12 +96,28 @@ export class BoardView extends Container {
     private onGameStateUpdate(state: GameState): void {
         switch (state) {
             case GameState.RightAnswer:
-                this.activeCard?.playRightAnswer();
+                this.activeCard?.playRightAnswer(() => this.emitRightAnimationCompleteEvent());
+
+                break;
+            case GameState.WrongAnswer:
+                this.activeCard?.playWrongAnswer(() => this.emitWrongAnimationCompleteEvent());
+
+                break;
+            case GameState.Completed:
+                this.activeCard?.hideContent();
 
                 break;
 
             default:
                 break;
         }
+    }
+
+    private emitRightAnimationCompleteEvent(): void {
+        lego.event.emit(BoardEvents.RightAnimationComplete);
+    }
+
+    private emitWrongAnimationCompleteEvent(): void {
+        lego.event.emit(BoardEvents.WrongAnimationComplete);
     }
 }

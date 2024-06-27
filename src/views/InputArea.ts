@@ -2,10 +2,11 @@ import anime from 'animejs';
 import { Container, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
 import { DEFAULT_FONT } from '../configs/GameConfig';
-import { delayRunnable, makeSprite } from '../utils';
+import { callIfExists, delayRunnable, makeSprite } from '../utils';
 
 export class InputArea extends Container {
     private bkg: Sprite;
+    private bkgCopy: Sprite;
     private typedText: Text;
     private typedTextCopy: Text;
     private indicator: Text;
@@ -54,43 +55,8 @@ export class InputArea extends Container {
         });
     }
 
-    public wrongAnswer(): void {
-        this.typedTextCopy = new Text(this.typedText.text, {
-            fontFamily: DEFAULT_FONT,
-            fontSize: 32,
-            fontWeight: 600,
-            fill: 0xff0000,
-        });
-        this.typedTextCopy.position.copyFrom(this.typedText);
-        this.typedTextCopy.anchor.set(0.5);
-        this.typedTextCopy.alpha = 0;
-        this.addChild(this.typedTextCopy);
-
-        anime({
-            targets: this.typedTextCopy,
-            alpha: 1,
-            easing: 'linear',
-            duration: 200,
-            complete: () => {
-                this.typedTextCopy.destroy();
-                this.typedText.text = '';
-                this.emit('wrongAnimationComplete');
-            },
-        });
-    }
-
-    public rightAnswerAnimation(): void {
-        this.typedTextCopy = new Text(this.typedText.text, {
-            fontFamily: DEFAULT_FONT,
-            fontSize: 32,
-            fontWeight: 600,
-            fill: 0x00ff00,
-        });
-        this.typedTextCopy.position.copyFrom(this.typedText);
-        this.typedTextCopy.anchor.set(0.5);
-        this.typedTextCopy.alpha = 0;
-        this.addChild(this.typedTextCopy);
-
+    public rightAnswerAnimation(cb?): void {
+        this.copyTypedText(0x00ff00);
         anime({
             targets: this.typedTextCopy,
             alpha: 1,
@@ -98,18 +64,50 @@ export class InputArea extends Container {
             duration: 200,
             complete: () => {
                 delayRunnable(0.5, () => {
-                    this.typedTextCopy.destroy();
+                    this.typedTextCopy.text = '';
+                    this.typedTextCopy.alpha = 0;
                     this.typedText.text = '';
                     this.indicator.position.set(0, 0);
-                    this.emit('rightAnimationComplete');
+                    callIfExists(cb);
                 });
             },
         });
     }
 
+    public wrongAnswerAnimation(cb?): void {
+        this.copyTypedText(0xffffff);
+        this;
+        anime({
+            targets: [this.typedTextCopy, this.bkgCopy],
+            alpha: 1,
+            easing: 'linear',
+            direction: 'alternate',
+            loop: 4,
+            duration: 300,
+            complete: () => {
+                delayRunnable(0.5, () => {
+                    this.typedTextCopy.text = '';
+                    this.typedTextCopy.alpha = 0;
+                    this.typedText.text = '';
+                    this.indicator.position.set(0, 0);
+                    callIfExists(cb);
+                });
+            },
+        });
+    }
+
+    private copyTypedText(color: number): void {
+        this.typedTextCopy.text = this.typedText.text;
+        this.typedTextCopy.style.fill = color;
+        this.typedTextCopy.position.copyFrom(this.typedText);
+        this.typedTextCopy.alpha = 0;
+    }
+
     private build(): void {
         this.buildBkg();
+        this.buildBkgCopy();
         this.buildTypedText();
+        this.buildTypedTextCopy();
         this.buildIndicator();
         this.scale.set(0);
     }
@@ -120,11 +118,27 @@ export class InputArea extends Container {
         this.addChild(this.bkg);
     }
 
+    private buildBkgCopy(): void {
+        this.bkgCopy = makeSprite({ texture: Images['game/input_area'] });
+        this.bkgCopy.anchor.set(0.5);
+        this.bkgCopy.tint = 0xff0000;
+        this.bkgCopy.alpha = 0;
+        this.addChild(this.bkgCopy);
+    }
+
     private buildTypedText(): void {
         this.typedText = new Text('', { fontFamily: DEFAULT_FONT, fontSize: 32, fontWeight: 600 });
         this.typedText.anchor.set(0.5);
         this.typedText.position.set(0, 0);
         this.bkg.addChild(this.typedText);
+    }
+
+    private buildTypedTextCopy(): void {
+        this.typedTextCopy = new Text('', { fontFamily: DEFAULT_FONT, fontSize: 32, fontWeight: 600 });
+        this.typedTextCopy.alpha = 0;
+        this.typedTextCopy.anchor.set(0.5);
+        this.typedTextCopy.position.set(0, 0);
+        this.addChild(this.typedTextCopy);
     }
 
     private buildIndicator(): void {

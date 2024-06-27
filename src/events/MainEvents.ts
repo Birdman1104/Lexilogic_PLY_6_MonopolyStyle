@@ -10,6 +10,8 @@ export const MainGameEvents = {
 
 export const BoardEvents = {
     CardClick: 'BoardEventsCardClick',
+    RightAnimationComplete: 'BoardEventsRightAnimationComplete',
+    WrongAnimationComplete: 'BoardEventsWrongAnimationComplete',
 };
 
 export const TakeMe = {

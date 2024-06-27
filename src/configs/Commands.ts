@@ -5,15 +5,15 @@ import Head from '../models/HeadModel';
 import { HintState } from '../models/HintModel';
 import { unMapCommands } from './EventCommandPairs';
 import {
+    activeCardCompleted,
     ctaModelGuard,
     gameModelGuard,
     hasActiveCardGuard,
     hintModelGuard,
     hintParamGuard,
+    isGuessedAnswerGuard,
     isRightAnswerGuard,
-    rightsCountReached,
     soundParamGuard,
-    wrongsCountReached,
 } from './Guards';
 import { KEYS } from './KeyboardViewConfig';
 
@@ -116,7 +116,7 @@ export const onCardClickCommand = (uuid: string): void => {
 
         .payload(GameState.Typing)
         .execute(setGameStateCommand);
-    // if (rightsCountReached() || wrongsCountReached()) {
+    // if (rightsCountReached() ) {
     //     lego.command.execute(takeToStoreCommand);
     //     return;
     // }
@@ -145,7 +145,7 @@ export const onCardClickCommand = (uuid: string): void => {
 const updateTypedTextCommand = (char: string): void => Head.gameModel?.board?.updateTypedText(char);
 const setActiveCardCommand = (uuid: string): void => Head.gameModel?.board?.setActiveCard(uuid);
 const clearActiveCardCommand = (title: string): void => Head.gameModel?.board?.clearActiveCard();
-// const clearTypedTextCommand = (): void => Head.gameModel?.board?.clearTypedText();
+const clearTypedTextCommand = (): void => Head.gameModel?.board?.clearTypedText();
 const clearLastChar = (): void => Head.gameModel?.board?.clearLastChar();
 const decreaseRightAnswersRemainingCommand = (): void => Head.gameModel?.board?.activeCard?.decreaseAnswersRemaining();
 // const increaseWrongsCountCommand = (): void => Head.gameModel?.increaseWrongsCount();
@@ -155,9 +155,40 @@ const showCtaCommand = (): void => Head.ad?.cta?.show();
 
 const turnOffTutorialModeCommand = (): void => Head.gameModel?.turnOffTutorialMode();
 
+const completeActiveCardCommand = (): void => Head.gameModel?.board?.completeActiveCard();
+
+export const onRightAnimationCompleteCommand = (): void => {
+    lego.command
+
+        .execute(clearTypedTextCommand)
+
+        .guard(activeCardCompleted)
+        .payload(GameState.Completed)
+        .execute(setGameStateCommand)
+
+        .guard(lego.not(activeCardCompleted))
+        .payload(GameState.Typing)
+        .execute(setGameStateCommand);
+};
+
+export const onWrongAnimationCompleteCommand = (): void => {
+    lego.command.execute(clearTypedTextCommand);
+
+    // .guard(activeCardCompleted)
+    // .payload(GameState.Completed)
+    // .execute(setGameStateCommand)
+
+    // .guard(lego.not(activeCardCompleted))
+    // .payload(GameState.Typing)
+    // .execute(setGameStateCommand);
+};
+
+const addAnswerToGuessedListCommand = (): void => Head.gameModel?.board?.addAnswerToList();
+
 const rightAnswerDetectedCommand = (): void => {
     lego.command
         //
+        .execute(addAnswerToGuessedListCommand)
         .execute(decreaseRightAnswersRemainingCommand);
     // .execute(setCardSolvedCommand);
 };
@@ -174,20 +205,26 @@ const wrongAnswerDetectedCommand = (): void => {
 };
 
 export const onKeyClickedCommand = (key: KEYS): void => {
-    if (rightsCountReached() || wrongsCountReached()) {
-        lego.command.execute(takeToStoreCommand);
-        return;
-    }
-    lego.command
-        .guard(hintModelGuard)
-        .execute(hideHintCommand)
-        .guard(hintModelGuard)
-        .execute(stopHintVisibilityTimerCommand)
-        .guard(hintModelGuard)
-        .execute(destroyHintModelCommand)
+    console.warn('onKeyClickedCommand');
 
+    lego.command
+
+        .guard(activeCardCompleted)
+        .execute(takeToStoreCommand)
+
+        .guard(lego.not(activeCardCompleted))
         .payload(key)
         .execute(processKeyPress);
+    // lego.command
+    //     .guard(hintModelGuard)
+    //     .execute(hideHintCommand)
+    //     .guard(hintModelGuard)
+    //     .execute(stopHintVisibilityTimerCommand)
+    //     .guard(hintModelGuard)
+    //     .execute(destroyHintModelCommand)
+
+    //     .payload(key)
+    //     .execute(processKeyPress);
 };
 
 const processKeyPress = (key: KEYS): void => {
@@ -212,7 +249,7 @@ const processKeyPress = (key: KEYS): void => {
             break;
         case KEYS.ENTER:
             lego.command
-                .guard(lego.not(isRightAnswerGuard))
+                .guard(lego.not(isRightAnswerGuard), lego.not(isGuessedAnswerGuard))
                 .payload(GameState.WrongAnswer)
                 .execute(setGameStateCommand)
 
@@ -246,9 +283,9 @@ export const onGameStateUpdateCommand = (state: GameState): void => {
             break;
         case GameState.WrongAnswer:
             lego.command.execute(wrongAnswerDetectedCommand);
-            //
             break;
         case GameState.Completed:
+            lego.command.execute(completeActiveCardCommand);
             //
             break;
 

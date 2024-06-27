@@ -34,15 +34,8 @@ export const hasActiveCardGuard = (): boolean => {
     return !!Head.gameModel?.board?.activeCard;
 };
 
-export const wrongsCountReached = (): boolean => {
-    return false;
-    // TODO
-    // return Head.gameModel?.wrongs === GAME_CONFIG.WrongsCount;
-};
-
-export const rightsCountReached = (): boolean => {
-    return false;
-    // return Head.gameModel?.rights === GAME_CONFIG.RightsCount;
+export const activeCardCompleted = (): boolean => {
+    return Head.gameModel?.board?.activeCard?.completed || false;
 };
 
 export const isTutorialMode = (): boolean => {
@@ -54,7 +47,11 @@ export const isTutorialCard = (title: string): boolean => {
 };
 
 export const isRightAnswerGuard = (): boolean => {
-    return Head.gameModel?.board?.isRightAnswerTyped() || false;
+    return Head.gameModel?.board?.isRightAnswer() || false;
+};
+
+export const isGuessedAnswerGuard = (): boolean => {
+    return Head.gameModel?.board?.isGuessedAnswer() || false;
 };
 
 export const isRightKeyGuard = (key): boolean => {

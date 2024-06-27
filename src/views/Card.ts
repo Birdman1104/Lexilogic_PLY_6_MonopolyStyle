@@ -38,19 +38,28 @@ export class Card extends Container {
     public openInputArea(): void {
         this.buildInputArea();
         this.inputArea.show();
+        this.hideQuestion();
     }
 
     public playRightAnswer(cb?): void {
-        this.inputArea.rightAnswerAnimation();
-        // this.isSolved = true;
+        this.inputArea.rightAnswerAnimation(cb);
+    }
+
+    public playWrongAnswer(cb?): void {
+        this.inputArea.wrongAnswerAnimation(cb);
     }
 
     public setTypedText(text: string): void {
         this.inputArea.setTypedText(text);
     }
 
-    public deactivate(): void {
-        //
+    public hideContent(): void {
+        anime({
+            targets: [this.inputArea, this.number],
+            alpha: 0,
+            duration: 300,
+            easing: 'easeInOutSine',
+        });
     }
 
     public updateNumber(newNumber: number): void {
@@ -114,5 +123,18 @@ export class Card extends Container {
         this.question.anchor.set(0.5);
         this.question.position.set(0, 45);
         this.bkg.addChild(this.question);
+    }
+
+    private hideQuestion(): void {
+        anime({
+            targets: this.question.scale,
+            x: 0,
+            y: 0,
+            duration: 300,
+            easing: 'easeInOutSine',
+            complete: () => {
+                this.question.visible = false;
+            },
+        });
     }
 }
