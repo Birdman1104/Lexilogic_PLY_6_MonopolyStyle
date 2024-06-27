@@ -4,10 +4,10 @@ import { GameState } from '../models/GameModel';
 import Head from '../models/HeadModel';
 import { HintState } from '../models/HintModel';
 import { unMapCommands } from './EventCommandPairs';
-import { GAME_CONFIG } from './GameConfig';
 import {
     ctaModelGuard,
     gameModelGuard,
+    hasActiveCardGuard,
     hintModelGuard,
     hintParamGuard,
     rightsCountReached,
@@ -107,44 +107,39 @@ export const onAdStatusUpdateCommand = (status: AdStatus): void => {
     }
 };
 
-export const onCardClickCommand = (title: string): void => {
+export const onCardClickCommand = (uuid: string): void => {
+    lego.command.payload(uuid).execute(setActiveCardCommand);
     // if (rightsCountReached() || wrongsCountReached()) {
     //     lego.command.execute(takeToStoreCommand);
     //     return;
     // }
     // if (Head.gameModel?.state === GameState.WrongAnswer) return;
-
     // lego.command
     //     //
     //     .guard(isTutorialMode)
     //     .execute(turnOffTutorialModeCommand)
-
     //     .payload(title)
     //     .guard(isTutorialCard, () => Head.ad?.hint?.state !== HintState.Letter)
     //     .execute(hideHintCommand)
-
     //     .execute(clearTypedTextCommand)
-
     //     .payload(GameState.Typing)
     //     .execute(setGameStateCommand);
-
-    if (title !== GAME_CONFIG.HintOnCard) {
-        lego.command
-
-            .guard(hintModelGuard)
-            .execute(hideHintCommand)
-            .guard(hintModelGuard)
-            .execute(stopHintVisibilityTimerCommand)
-            .guard(hintModelGuard)
-            .execute(startHintVisibilityTimerCommand);
-    }
+    // if (title !== GAME_CONFIG.HintOnCard) {
+    //     lego.command
+    //         .guard(hintModelGuard)
+    //         .execute(hideHintCommand)
+    //         .guard(hintModelGuard)
+    //         .execute(stopHintVisibilityTimerCommand)
+    //         .guard(hintModelGuard)
+    //         .execute(startHintVisibilityTimerCommand);
+    // }
 };
 
-// const updateTypedTextCommand = (char: string): void => Head.gameModel?.board?.updateTypedText(char);
-// const setActiveCardCommand = (title: string): void => Head.gameModel?.board?.setActiveCard(title);
-// const clearActiveCardCommand = (title: string): void => Head.gameModel?.board?.clearActiveCard();
+const updateTypedTextCommand = (char: string): void => Head.gameModel?.board?.updateTypedText(char);
+const setActiveCardCommand = (uuid: string): void => Head.gameModel?.board?.setActiveCard(uuid);
+const clearActiveCardCommand = (title: string): void => Head.gameModel?.board?.clearActiveCard();
 // const clearTypedTextCommand = (): void => Head.gameModel?.board?.clearTypedText();
-// const clearLastChar = (): void => Head.gameModel?.board?.clearLastChar();
+const clearLastChar = (): void => Head.gameModel?.board?.clearLastChar();
 // const increaseRightAnswersCountCommand = (): void => Head.gameModel?.increaseRightAnswersCount();
 // const increaseWrongsCountCommand = (): void => Head.gameModel?.increaseWrongsCount();
 // const setCardSolvedCommand = (): void => Head.gameModel?.board?.cardSolved();
@@ -173,22 +168,22 @@ export const onKeyClickedCommand = (key: KEYS): void => {
 const processKeyPress = (key: KEYS): void => {
     switch (key) {
         case KEYS.SPACE:
-            // lego.command
-            //     //
-            //     .guard(hasActiveCardGuard)
-            //     .payload(' ')
-            //     .execute(updateTypedTextCommand);
+            lego.command
+                //
+                .guard(hasActiveCardGuard)
+                .payload(' ')
+                .execute(updateTypedTextCommand);
             break;
         case KEYS.CLOSE:
-            // lego.command
-            //     //
-            //     .execute(clearActiveCardCommand);
+            lego.command
+                //
+                .execute(clearActiveCardCommand);
             break;
         case KEYS.BACKSPACE:
-            // lego.command
-            //     //
-            //     .guard(hasActiveCardGuard)
-            //     .execute(clearLastChar);
+            lego.command
+                //
+                .guard(hasActiveCardGuard)
+                .execute(clearLastChar);
             break;
         case KEYS.ENTER:
             // lego.command
@@ -200,11 +195,11 @@ const processKeyPress = (key: KEYS): void => {
 
             break;
         default:
-            // lego.command
-            //     //
-            //     .guard(hasActiveCardGuard)
-            //     .payload(KEYS[key])
-            //     .execute(updateTypedTextCommand);
+            lego.command
+                //
+                .guard(hasActiveCardGuard)
+                .payload(KEYS[key])
+                .execute(updateTypedTextCommand);
             break;
     }
 };

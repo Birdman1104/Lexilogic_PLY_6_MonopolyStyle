@@ -6,6 +6,7 @@ export class CardModel extends ObservableModel {
     private _answers: string[] = [];
     private _answersRemaining: number = WORDS_TO_GUESS;
     private _completed = false;
+    private _interactivity = false;
 
     constructor({ question, answers }: CardConfig, private _i: number, private _j: number) {
         super('CardModel');
@@ -13,7 +14,7 @@ export class CardModel extends ObservableModel {
         this._question = question;
         this._answers = answers;
 
-        this.makeObservable('_completed', '_answersRemaining');
+        this.makeObservable('_completed', '_answersRemaining', '_interactivity');
     }
 
     get i(): number {
@@ -48,11 +49,23 @@ export class CardModel extends ObservableModel {
         this._completed = value;
     }
 
+    get interactivity(): boolean {
+        return this._interactivity;
+    }
+
+    set interactivity(value: boolean) {
+        this._interactivity = value;
+    }
+
     public decreaseAnswersRemaining(): void {
         this._answersRemaining -= 1;
 
         if (this._answersRemaining === 0) {
             this.completed = true;
         }
+    }
+
+    public setInteractivity(value: boolean): void {
+        this._interactivity = value;
     }
 }

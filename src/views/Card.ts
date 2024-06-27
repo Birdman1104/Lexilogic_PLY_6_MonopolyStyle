@@ -18,6 +18,10 @@ export class Card extends Container {
         this.build();
     }
 
+    get uuid(): string {
+        return this.config.uuid;
+    }
+
     public destroy(
         options?:
             | { children?: boolean | undefined; texture?: boolean | undefined; baseTexture?: boolean | undefined }
@@ -26,13 +30,21 @@ export class Card extends Container {
         super.destroy(options);
     }
 
+    public enable(): void {
+        this.bkg.interactive = true;
+    }
+
+    public openInputArea(): void {
+        this.buildInputArea();
+        this.inputArea.show();
+    }
+
     public solvedAnimation(cb?): void {
         // this.isSolved = true;
     }
 
     public setTypedText(text: string): void {
-        // this.typedText.text = text;
-        // this.indicator.x = this.typedText.x + this.typedText.width / 2 + (text.length === 0 ? 0 : 5);
+        this.inputArea.setTypedText(text);
     }
 
     public deactivate(): void {
@@ -40,24 +52,23 @@ export class Card extends Container {
     }
 
     public activate(): void {
-        //
+        this.bkg.interactive = true;
     }
 
     private build(): void {
         this.buildBkg();
         this.buildNumber();
         this.buildQuestion();
-        this.buildInputArea();
     }
 
     private buildBkg(): void {
         this.bkg = makeSprite({ texture: Images['game/question_bkg_1'] });
         this.bkg.anchor.set(0.5, 0.5);
-        this.bkg.interactive = true;
-        // this.bkg.on('pointerdown', () => {
-        //     if (this.isSolved) return;
-        //     this.emit('card_clicked', this.config.title);
-        // });
+        // this.bkg.interactive = true;
+        this.bkg.on('pointerdown', () => {
+            if (this.isSolved) return;
+            this.emit('card_clicked', this.uuid);
+        });
         this.addChild(this.bkg);
     }
 

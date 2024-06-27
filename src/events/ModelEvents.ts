@@ -5,11 +5,16 @@ export const AdModelEvents = {
     HintUpdate: 'AdModelHintUpdate',
 };
 
-export const BoardModelEvents = { CardsUpdate: 'BoardModelCardsUpdate' };
+export const BoardModelEvents = {
+    ActiveCardUpdate: 'BoardModelActiveCardUpdate',
+    CardsUpdate: 'BoardModelCardsUpdate',
+    TypedTextUpdate: 'BoardModelTypedTextUpdate',
+};
 
 export const CardModelEvents = {
     AnswersRemainingUpdate: 'CardModelAnswersRemainingUpdate',
     CompletedUpdate: 'CardModelCompletedUpdate',
+    InteractivityUpdate: 'CardModelInteractivityUpdate',
 };
 
 export const CtaModelEvents = { VisibleUpdate: 'CtaModelVisibleUpdate' };
