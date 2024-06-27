@@ -29,7 +29,7 @@ export class CardModel extends ObservableModel {
         return this._question;
     }
 
-    get rightAnswer(): string[] {
+    get rightAnswers(): string[] {
         return this._answers;
     }
 

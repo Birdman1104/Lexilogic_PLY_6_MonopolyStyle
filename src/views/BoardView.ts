@@ -17,6 +17,7 @@ export class BoardView extends Container {
             .on(BoardModelEvents.CardsUpdate, this.onCardsUpdate, this)
             .on(BoardModelEvents.ActiveCardUpdate, this.onActiveCardUpdate, this)
             .on(BoardModelEvents.TypedTextUpdate, this.onTypedTextUpdate, this)
+            .on(CardModelEvents.AnswersRemainingUpdate, this.onAnswersRemainingUpdate, this)
             .on(CardModelEvents.InteractivityUpdate, this.onCardInteractivityUpdate, this);
 
         this.build();
@@ -55,7 +56,6 @@ export class BoardView extends Container {
     }
 
     private onCardClick(uuid): void {
-        console.warn(uuid);
         lego.event.emit(BoardEvents.CardClick, uuid);
     }
 
@@ -82,5 +82,12 @@ export class BoardView extends Container {
 
     private onTypedTextUpdate(text: string): void {
         this.activeCard?.setTypedText(text);
+    }
+
+    private onAnswersRemainingUpdate(newValue: number, oldValue: number, uuid: string): void {
+        const card = this.getCardByUuid(uuid);
+        if (!card) return;
+
+        card.updateNumber(newValue);
     }
 }

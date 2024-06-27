@@ -1,3 +1,4 @@
+import anime from 'animejs';
 import { Container, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
 import { DEFAULT_FONT } from '../configs/GameConfig';
@@ -51,6 +52,20 @@ export class Card extends Container {
         //
     }
 
+    public updateNumber(newNumber: number): void {
+        anime({
+            targets: this.number.scale,
+            x: 1.2,
+            y: 1.2,
+            duration: 100,
+            easing: 'easeInOutSine',
+            complete: () => {
+                this.number.scale.set(1);
+                this.number.text = `${newNumber}`;
+            },
+        });
+    }
+
     public activate(): void {
         this.bkg.interactive = true;
     }
@@ -64,7 +79,6 @@ export class Card extends Container {
     private buildBkg(): void {
         this.bkg = makeSprite({ texture: Images['game/question_bkg_1'] });
         this.bkg.anchor.set(0.5, 0.5);
-        // this.bkg.interactive = true;
         this.bkg.on('pointerdown', () => {
             if (this.isSolved) return;
             this.emit('card_clicked', this.uuid);

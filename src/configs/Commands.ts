@@ -10,6 +10,7 @@ import {
     hasActiveCardGuard,
     hintModelGuard,
     hintParamGuard,
+    isRightAnswerGuard,
     rightsCountReached,
     soundParamGuard,
     wrongsCountReached,
@@ -140,13 +141,33 @@ const setActiveCardCommand = (uuid: string): void => Head.gameModel?.board?.setA
 const clearActiveCardCommand = (title: string): void => Head.gameModel?.board?.clearActiveCard();
 // const clearTypedTextCommand = (): void => Head.gameModel?.board?.clearTypedText();
 const clearLastChar = (): void => Head.gameModel?.board?.clearLastChar();
-// const increaseRightAnswersCountCommand = (): void => Head.gameModel?.increaseRightAnswersCount();
+const decreaseRightAnswersRemainingCommand = (): void => Head.gameModel?.board?.activeCard?.decreaseAnswersRemaining();
 // const increaseWrongsCountCommand = (): void => Head.gameModel?.increaseWrongsCount();
 // const setCardSolvedCommand = (): void => Head.gameModel?.board?.cardSolved();
 const setGameStateCommand = (state: GameState): void => Head.gameModel?.setState(state);
 const showCtaCommand = (): void => Head.ad?.cta?.show();
 
 const turnOffTutorialModeCommand = (): void => Head.gameModel?.turnOffTutorialMode();
+
+const rightAnswerDetectedCommand = (): void => {
+    console.warn('rightAnswerDetectedCommand');
+
+    lego.command
+        //
+        .execute(decreaseRightAnswersRemainingCommand);
+    // .execute(setCardSolvedCommand);
+};
+
+const wrongAnswerDetectedCommand = (): void => {
+    console.warn('wrongAnswerDetectedCommand');
+
+    // lego.command
+    //     //
+    //     .execute(increaseWrongsCountCommand)
+
+    //     .payload(GameState.WrongAnswer)
+    //     .execute(setGameStateCommand);
+};
 
 export const onKeyClickedCommand = (key: KEYS): void => {
     if (rightsCountReached() || wrongsCountReached()) {
@@ -186,12 +207,12 @@ const processKeyPress = (key: KEYS): void => {
                 .execute(clearLastChar);
             break;
         case KEYS.ENTER:
-            // lego.command
-            //     .guard(lego.not(isRightAnswerGuard))
-            //     .execute(wrongAnswerDetectedCommand)
+            lego.command
+                .guard(lego.not(isRightAnswerGuard))
+                .execute(wrongAnswerDetectedCommand)
 
-            //     .guard(isRightAnswerGuard)
-            //     .execute(rightAnswerDetectedCommand);
+                .guard(isRightAnswerGuard)
+                .execute(rightAnswerDetectedCommand);
 
             break;
         default:

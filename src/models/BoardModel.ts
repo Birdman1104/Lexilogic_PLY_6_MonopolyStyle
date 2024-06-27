@@ -41,6 +41,12 @@ export class BoardModel extends ObservableModel {
         return this._cards.find((c) => c.uuid === uuid);
     }
 
+    public isRightAnswerTyped(): boolean {
+        const typedText = this.typedText.toLowerCase();
+        const answers = this.activeCard?.rightAnswers.map((a) => a.toLowerCase()) || [];
+        return answers.includes(typedText);
+    }
+
     public updateTypedText(char: string): void {
         if (this._typedText.length === 16) return;
 
