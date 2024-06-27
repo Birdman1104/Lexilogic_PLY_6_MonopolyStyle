@@ -2,9 +2,9 @@ import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { Graphics, SCALE_MODES, Sprite } from 'pixi.js';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
-import { AdModelEvents, BoardModelEvents } from '../events/ModelEvents';
+import { AdModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { AdStatus } from '../models/AdModel';
-import { CardModel } from '../models/CardModel';
+import { GameState } from '../models/GameModel';
 import { HintModel } from '../models/HintModel';
 import { tweenToCell } from '../utils';
 import { HintView } from './HintView';
@@ -19,7 +19,7 @@ export class ForegroundView extends PixiGrid {
 
         lego.event
             .on(AdModelEvents.StatusUpdate, this.onStatusUpdate, this)
-            .on(BoardModelEvents.ActiveCardUpdate, this.onActiveCardUpdate, this)
+            .on(GameModelEvents.StateUpdate, this.onGameStateUpdateCommand, this)
             .on(AdModelEvents.HintUpdate, this.onHintUpdate, this);
     }
 
@@ -87,8 +87,19 @@ export class ForegroundView extends PixiGrid {
         this.hint = null;
     }
 
-    private onActiveCardUpdate(card: CardModel): void {
-        card ? this.showKeyboard() : this.hideKeyboard();
+    private onGameStateUpdateCommand(state: GameState): void {
+        switch (state) {
+            case GameState.Typing:
+                this.showKeyboard();
+                break;
+            case GameState.Completed:
+                this.hideKeyboard();
+                break;
+
+            default:
+                break;
+        }
+        // card ? this.showKeyboard() : this.hideKeyboard();
     }
 
     public hideKeyboard(): void {

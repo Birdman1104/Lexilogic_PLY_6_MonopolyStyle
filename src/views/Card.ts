@@ -40,7 +40,8 @@ export class Card extends Container {
         this.inputArea.show();
     }
 
-    public solvedAnimation(cb?): void {
+    public playRightAnswer(cb?): void {
+        this.inputArea.rightAnswerAnimation();
         // this.isSolved = true;
     }
 

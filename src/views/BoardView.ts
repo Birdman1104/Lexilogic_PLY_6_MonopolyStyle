@@ -2,8 +2,9 @@ import { lego } from '@armathai/lego';
 import { Container, Rectangle } from 'pixi.js';
 import { CARD_HEIGHT, CARD_WIDTH } from '../configs/constants';
 import { BoardEvents } from '../events/MainEvents';
-import { BoardModelEvents, CardModelEvents } from '../events/ModelEvents';
+import { BoardModelEvents, CardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { CardModel } from '../models/CardModel';
+import { GameState } from '../models/GameModel';
 import { Card } from './Card';
 
 export class BoardView extends Container {
@@ -14,6 +15,7 @@ export class BoardView extends Container {
         super();
 
         lego.event
+            .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
             .on(BoardModelEvents.CardsUpdate, this.onCardsUpdate, this)
             .on(BoardModelEvents.ActiveCardUpdate, this.onActiveCardUpdate, this)
             .on(BoardModelEvents.TypedTextUpdate, this.onTypedTextUpdate, this)
@@ -89,5 +91,17 @@ export class BoardView extends Container {
         if (!card) return;
 
         card.updateNumber(newValue);
+    }
+
+    private onGameStateUpdate(state: GameState): void {
+        switch (state) {
+            case GameState.RightAnswer:
+                this.activeCard?.playRightAnswer();
+
+                break;
+
+            default:
+                break;
+        }
     }
 }

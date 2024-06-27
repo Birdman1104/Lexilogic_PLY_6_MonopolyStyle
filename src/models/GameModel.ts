@@ -2,12 +2,12 @@ import { BoardModel } from './BoardModel';
 import { ObservableModel } from './ObservableModel';
 
 export enum GameState {
-    Unknown,
-    Idle,
-    Typing,
-    WrongAnswer,
-    RightAnswer,
-    Completed,
+    Unknown = 'Unknown',
+    Idle = 'Idle',
+    Typing = 'Typing',
+    WrongAnswer = 'WrongAnswer',
+    RightAnswer = 'RightAnswer',
+    Completed = 'Completed',
 }
 
 export class GameModel extends ObservableModel {

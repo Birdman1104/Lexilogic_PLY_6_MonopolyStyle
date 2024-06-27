@@ -109,7 +109,13 @@ export const onAdStatusUpdateCommand = (status: AdStatus): void => {
 };
 
 export const onCardClickCommand = (uuid: string): void => {
-    lego.command.payload(uuid).execute(setActiveCardCommand);
+    lego.command
+        //
+        .payload(uuid)
+        .execute(setActiveCardCommand)
+
+        .payload(GameState.Typing)
+        .execute(setGameStateCommand);
     // if (rightsCountReached() || wrongsCountReached()) {
     //     lego.command.execute(takeToStoreCommand);
     //     return;
@@ -150,8 +156,6 @@ const showCtaCommand = (): void => Head.ad?.cta?.show();
 const turnOffTutorialModeCommand = (): void => Head.gameModel?.turnOffTutorialMode();
 
 const rightAnswerDetectedCommand = (): void => {
-    console.warn('rightAnswerDetectedCommand');
-
     lego.command
         //
         .execute(decreaseRightAnswersRemainingCommand);
@@ -209,10 +213,12 @@ const processKeyPress = (key: KEYS): void => {
         case KEYS.ENTER:
             lego.command
                 .guard(lego.not(isRightAnswerGuard))
-                .execute(wrongAnswerDetectedCommand)
+                .payload(GameState.WrongAnswer)
+                .execute(setGameStateCommand)
 
                 .guard(isRightAnswerGuard)
-                .execute(rightAnswerDetectedCommand);
+                .payload(GameState.RightAnswer)
+                .execute(setGameStateCommand);
 
             break;
         default:
@@ -226,22 +232,45 @@ const processKeyPress = (key: KEYS): void => {
 };
 
 export const onGameStateUpdateCommand = (state: GameState): void => {
-    if (state === GameState.Typing && hintModelGuard()) {
-        lego.command
+    console.warn(state);
+
+    switch (state) {
+        case GameState.Idle:
             //
-            .guard(hintModelGuard)
-            .payload(HintState.Letter)
-            .execute(setHintStateCommand)
+            break;
+        case GameState.Typing:
+            //
+            break;
+        case GameState.RightAnswer:
+            lego.command.execute(rightAnswerDetectedCommand);
+            break;
+        case GameState.WrongAnswer:
+            lego.command.execute(wrongAnswerDetectedCommand);
+            //
+            break;
+        case GameState.Completed:
+            //
+            break;
 
-            .guard(hintModelGuard)
-            .execute(hideHintCommand)
-
-            .guard(hintModelGuard)
-            .execute(stopHintVisibilityTimerCommand)
-
-            .guard(hintModelGuard)
-            .execute(startHintVisibilityTimerCommand);
+        default:
+            break;
     }
+    // if (state === GameState.Typing && hintModelGuard()) {
+    //     lego.command
+    //         //
+    //         .guard(hintModelGuard)
+    //         .payload(HintState.Letter)
+    //         .execute(setHintStateCommand)
+
+    //         .guard(hintModelGuard)
+    //         .execute(hideHintCommand)
+
+    //         .guard(hintModelGuard)
+    //         .execute(stopHintVisibilityTimerCommand)
+
+    //         .guard(hintModelGuard)
+    //         .execute(startHintVisibilityTimerCommand);
+    // }
 };
 
 export const resizeCommand = (): void => {

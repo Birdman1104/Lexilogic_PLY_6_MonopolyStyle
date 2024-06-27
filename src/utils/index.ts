@@ -36,7 +36,7 @@ export const fitDimension = (
     return dim;
 };
 
-export const delayRunnable = (delay, runnable, context, ...args) => {
+export const delayRunnable = (delay, runnable, context?, ...args) => {
     let delayMS = delay * 1000;
     const delayWrapper = () => {
         delayMS -= window.game.ticker.deltaMS;

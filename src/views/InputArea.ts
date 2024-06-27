@@ -2,7 +2,7 @@ import anime from 'animejs';
 import { Container, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
 import { DEFAULT_FONT } from '../configs/GameConfig';
-import { makeSprite } from '../utils';
+import { delayRunnable, makeSprite } from '../utils';
 
 export class InputArea extends Container {
     private bkg: Sprite;
@@ -79,7 +79,7 @@ export class InputArea extends Container {
         });
     }
 
-    public rightAnswer(): void {
+    public rightAnswerAnimation(): void {
         this.typedTextCopy = new Text(this.typedText.text, {
             fontFamily: DEFAULT_FONT,
             fontSize: 32,
@@ -97,9 +97,12 @@ export class InputArea extends Container {
             easing: 'linear',
             duration: 200,
             complete: () => {
-                this.typedTextCopy.destroy();
-                this.typedText.text = '';
-                this.emit('rightAnimationComplete');
+                delayRunnable(0.5, () => {
+                    this.typedTextCopy.destroy();
+                    this.typedText.text = '';
+                    this.indicator.position.set(0, 0);
+                    this.emit('rightAnimationComplete');
+                });
             },
         });
     }
