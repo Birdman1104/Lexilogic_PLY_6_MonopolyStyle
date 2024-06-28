@@ -1,6 +1,6 @@
 import { lego } from '@armathai/lego';
 import { Container, Rectangle } from 'pixi.js';
-import { CARD_HEIGHT, CARD_WIDTH } from '../configs/constants';
+import { CARD_HEIGHT, CARD_WIDTH, OFFSET_LEFT, OFFSET_TOP } from '../configs/constants';
 import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents, CardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { CardModel } from '../models/CardModel';
@@ -50,7 +50,9 @@ export class BoardView extends Container {
     private onCardsUpdate(cards: CardModel[]): void {
         cards.forEach((c) => {
             const card = new Card(c);
-            card.position.set(c.j * CARD_WIDTH + CARD_WIDTH / 2, c.i * CARD_HEIGHT + CARD_HEIGHT / 2);
+            const x = c.j * CARD_WIDTH + CARD_WIDTH / 2 + OFFSET_LEFT * c.j;
+            const y = c.i * CARD_HEIGHT + CARD_HEIGHT / 2 + OFFSET_TOP * c.i;
+            card.position.set(x, y);
             card.on('card_clicked', this.onCardClick);
             this.cards.push(card);
             this.addChild(card);

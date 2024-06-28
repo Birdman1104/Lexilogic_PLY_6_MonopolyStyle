@@ -130,7 +130,7 @@ export class InputArea extends Container {
         this.typedText = new Text('', { fontFamily: DEFAULT_FONT, fontSize: 32, fontWeight: 600 });
         this.typedText.anchor.set(0.5);
         this.typedText.position.set(0, 0);
-        this.bkg.addChild(this.typedText);
+        this.addChild(this.typedText);
     }
 
     private buildTypedTextCopy(): void {
@@ -146,6 +146,6 @@ export class InputArea extends Container {
         this.indicator.anchor.set(0.5);
         this.indicator.position.set(0, 0);
         // this.indicator.visible = false;
-        this.bkg.addChild(this.indicator);
+        this.addChild(this.indicator);
     }
 }

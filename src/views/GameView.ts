@@ -1,9 +1,12 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
+import { Graphics } from 'pixi.js';
+import { CARD_HEIGHT, CARD_WIDTH, GENERATED_TEXTURES } from '../configs/constants';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
 import { GameModelEvents, HintModelEvents } from '../events/ModelEvents';
 import { BoardModel } from '../models/BoardModel';
 import { CardModel } from '../models/CardModel';
+import { GameState } from '../models/GameModel';
 import { HintState } from '../models/HintModel';
 import { BoardView } from './BoardView';
 
@@ -11,12 +14,11 @@ export class GameView extends PixiGrid {
     private board: BoardView;
     private hintOnCard = true;
 
-    private elapsed = Date.now();
-
     constructor() {
         super();
 
         lego.event
+            .on(GameModelEvents.StateUpdate, this.onStateUpdate, this)
             .on(GameModelEvents.BoardUpdate, this.onBoardUpdate, this)
             .on(HintModelEvents.StateUpdate, this.onHintStateUpdate, this);
         this.build();
@@ -27,8 +29,7 @@ export class GameView extends PixiGrid {
     }
 
     public update(): void {
-        const now = Date.now();
-        this.elapsed = now;
+        //
     }
 
     public rebuild(config?: ICellConfig | undefined): void {
@@ -37,7 +38,25 @@ export class GameView extends PixiGrid {
     }
 
     private build(): void {
-        //
+        const gr = new Graphics();
+        // gray card bkg
+        gr.lineStyle(3, 0x808080, 1);
+        gr.beginFill(0xffffff);
+        gr.drawRoundedRect(0, 0, CARD_WIDTH, CARD_HEIGHT, 10);
+        gr.endFill();
+        GENERATED_TEXTURES.cardBkgMain = window.game.renderer.generateTexture(gr);
+
+        gr.clear();
+
+        // blue card bkg
+        gr.lineStyle(3, 0x0237a1, 1);
+        gr.beginFill(0xffffff);
+        gr.drawRoundedRect(0, 0, CARD_WIDTH, CARD_HEIGHT, 10);
+        gr.endFill();
+
+        GENERATED_TEXTURES.cardBkgSelected = window.game.renderer.generateTexture(gr);
+
+        gr.destroy();
     }
 
     private onHintStateUpdate(state: HintState): void {
@@ -46,6 +65,10 @@ export class GameView extends PixiGrid {
 
     private onBoardUpdate(board: BoardModel | null): void {
         board ? this.buildBoard() : this.destroyBoard();
+    }
+
+    private onStateUpdate(state: GameState): void {
+        // console.warn(state);
     }
 
     private buildBoard() {
