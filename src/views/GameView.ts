@@ -8,7 +8,6 @@ import { BoardModel } from '../models/BoardModel';
 import { CardModel } from '../models/CardModel';
 import { GameState } from '../models/GameModel';
 import { HintState } from '../models/HintModel';
-import { tweenToCell } from '../utils';
 import { BoardView } from './BoardView';
 
 export class GameView extends PixiGrid {
@@ -93,6 +92,6 @@ export class GameView extends PixiGrid {
     }
 
     private onActiveCardUpdate(card: CardModel): void {
-        card ? tweenToCell(this, this.board, 'board2') : tweenToCell(this, this.board, 'board');
+        // card ? tweenToCell(this, this.board, 'board2') : tweenToCell(this, this.board, 'board');
     }
 }

@@ -14,7 +14,7 @@ const getForegroundGridLandscapeConfig = () => {
         cells: [
             {
                 name: 'title',
-                bounds: { x: 0.025, y: 0, width: 0.3, height: 0.4 },
+                bounds: { x: 0.025, y: 0.3, width: 0.3, height: 0.4 },
             },
             {
                 name: 'keyboard',
