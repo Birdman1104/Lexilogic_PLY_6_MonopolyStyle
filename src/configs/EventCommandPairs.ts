@@ -4,6 +4,7 @@ import { AdModelEvents, GameModelEvents } from '../events/ModelEvents';
 import {
     onAdStatusUpdateCommand,
     onCardClickCommand,
+    onCardCompleteAnimationCompleteCommand,
     onGameStateUpdateCommand,
     onKeyClickedCommand,
     onMainViewReadyCommand,
@@ -53,6 +54,10 @@ const eventCommandPairs = Object.freeze([
     {
         event: BoardEvents.WrongAnimationComplete,
         command: onWrongAnimationCompleteCommand,
+    },
+    {
+        event: BoardEvents.CardCompleteAnimationComplete,
+        command: onCardCompleteAnimationCompleteCommand,
     },
     {
         event: MainGameEvents.Resize,

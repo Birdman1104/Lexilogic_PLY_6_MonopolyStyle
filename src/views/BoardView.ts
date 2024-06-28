@@ -106,7 +106,7 @@ export class BoardView extends Container {
 
                 break;
             case GameState.Completed:
-                this.activeCard?.hideContent();
+                this.activeCard?.hideContent(() => this.emitCardCompleteAnimationCompleteEvent());
 
                 break;
 
@@ -121,5 +121,9 @@ export class BoardView extends Container {
 
     private emitWrongAnimationCompleteEvent(): void {
         lego.event.emit(BoardEvents.WrongAnimationComplete);
+    }
+
+    private emitCardCompleteAnimationCompleteEvent(): void {
+        lego.event.emit(BoardEvents.CardCompleteAnimationComplete);
     }
 }

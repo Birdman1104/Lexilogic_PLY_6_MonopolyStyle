@@ -12,6 +12,7 @@ export const BoardEvents = {
     CardClick: 'BoardEventsCardClick',
     RightAnimationComplete: 'BoardEventsRightAnimationComplete',
     WrongAnimationComplete: 'BoardEventsWrongAnimationComplete',
+    CardCompleteAnimationComplete: 'BoardEventsCardCompleteAnimationComplete',
 };
 
 export const TakeMe = {

@@ -2,7 +2,7 @@ import anime from 'animejs';
 import { Container, Sprite, Text } from 'pixi.js';
 import { DEFAULT_FONT } from '../configs/GameConfig';
 import { GENERATED_TEXTURES } from '../configs/constants';
-import { makeSprite } from '../utils';
+import { callIfExists, makeSprite } from '../utils';
 import { InputArea } from './InputArea';
 
 export class Card extends Container {
@@ -55,12 +55,13 @@ export class Card extends Container {
         this.inputArea.setTypedText(text);
     }
 
-    public hideContent(): void {
+    public hideContent(cb?): void {
         anime({
-            targets: [this.inputArea, this.number],
+            targets: [this.inputArea, this.number, this.bkgSelected],
             alpha: 0,
             duration: 300,
             easing: 'easeInOutSine',
+            complete: () => callIfExists(cb),
         });
     }
 
@@ -113,10 +114,10 @@ export class Card extends Container {
             fontFamily: DEFAULT_FONT,
             fontSize: 64,
             fontWeight: 600,
-            fill: 0x5c5c5c,
+            fill: 0x9c9c9c,
         });
         this.number.anchor.set(0.5);
-        this.number.position.set(0, -this.bkg.height / 2 + this.number.height);
+        this.number.position.set(0, -50);
         this.addChild(this.number);
     }
 
@@ -131,7 +132,7 @@ export class Card extends Container {
             fontFamily: DEFAULT_FONT,
             fontSize: 48,
             fontWeight: 600,
-            fill: 0x5c5c5c,
+            fill: 0x9c9c9c,
             align: 'center',
         });
         this.question.anchor.set(0.5);

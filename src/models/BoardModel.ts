@@ -92,6 +92,13 @@ export class BoardModel extends ObservableModel {
         this._activeCard = null;
     }
 
+    public activateNextCard(): void {
+        const i = this._cards.indexOf(this.activeCard as CardModel);
+        const nextCard = this._cards[i + 1];
+        nextCard.setInteractivity(true);
+        this.clearActiveCard();
+    }
+
     public initialize(): void {
         const tempArr: CardModel[] = [];
         for (let i = 0; i < CARD_CONFIG.length; i++) {

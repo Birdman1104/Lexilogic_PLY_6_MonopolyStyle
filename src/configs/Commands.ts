@@ -172,15 +172,15 @@ export const onRightAnimationCompleteCommand = (): void => {
 };
 
 export const onWrongAnimationCompleteCommand = (): void => {
-    lego.command.execute(clearTypedTextCommand);
+    lego.command
+        .execute(clearTypedTextCommand)
 
-    // .guard(activeCardCompleted)
-    // .payload(GameState.Completed)
-    // .execute(setGameStateCommand)
+        .payload(GameState.Typing)
+        .execute(setGameStateCommand);
+};
 
-    // .guard(lego.not(activeCardCompleted))
-    // .payload(GameState.Typing)
-    // .execute(setGameStateCommand);
+export const onCardCompleteAnimationCompleteCommand = (): void => {
+    Head.gameModel?.board?.activateNextCard();
 };
 
 const addAnswerToGuessedListCommand = (): void => Head.gameModel?.board?.addAnswerToList();
@@ -190,7 +190,6 @@ const rightAnswerDetectedCommand = (): void => {
         //
         .execute(addAnswerToGuessedListCommand)
         .execute(decreaseRightAnswersRemainingCommand);
-    // .execute(setCardSolvedCommand);
 };
 
 const wrongAnswerDetectedCommand = (): void => {
