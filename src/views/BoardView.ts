@@ -36,7 +36,7 @@ export class BoardView extends Container {
     }
 
     public getBounds(skipUpdate?: boolean | undefined, rect?: Rectangle | undefined): Rectangle {
-        return new Rectangle(0, 0, CARD_WIDTH * 3, CARD_HEIGHT * 3);
+        return new Rectangle(0, 0, CARD_WIDTH * 3 + OFFSET_LEFT * 2, CARD_HEIGHT * 3 + OFFSET_TOP * 2);
     }
 
     public rebuild(): void {

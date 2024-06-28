@@ -1,7 +1,7 @@
 import anime from 'animejs';
 import { Container, Sprite, Text } from 'pixi.js';
-import { Images } from '../assets';
 import { DEFAULT_FONT } from '../configs/GameConfig';
+import { GENERATED_TEXTURES } from '../configs/constants';
 import { callIfExists, delayRunnable, makeSprite } from '../utils';
 
 export class InputArea extends Container {
@@ -113,13 +113,13 @@ export class InputArea extends Container {
     }
 
     private buildBkg(): void {
-        this.bkg = makeSprite({ texture: Images['game/input_area'] });
+        this.bkg = makeSprite({ texture: GENERATED_TEXTURES.inputArea });
         this.bkg.anchor.set(0.5);
         this.addChild(this.bkg);
     }
 
     private buildBkgCopy(): void {
-        this.bkgCopy = makeSprite({ texture: Images['game/input_area'] });
+        this.bkgCopy = makeSprite({ texture: GENERATED_TEXTURES.inputArea });
         this.bkgCopy.anchor.set(0.5);
         this.bkgCopy.tint = 0xff0000;
         this.bkgCopy.alpha = 0;

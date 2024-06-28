@@ -10,8 +10,6 @@ export const assets = {
         'game/input_area.png': require('../assets/images/game/input_area.png').default,
         'game/key_bkg.png': require('../assets/images/game/key_bkg.png').default,
         'game/keyboard_bkg.jpg': require('../assets/images/game/keyboard_bkg.jpg').default,
-        'game/question_bkg_1.png': require('../assets/images/game/question_bkg_1.png').default,
-        'game/question_bkg_2.png': require('../assets/images/game/question_bkg_2.png').default,
         'game/space_bkg.png': require('../assets/images/game/space_bkg.png').default,
     },
     particles: {},
@@ -29,8 +27,6 @@ export const Images = {
     'game/input_area': 'game/input_area.png',
     'game/key_bkg': 'game/key_bkg.png',
     'game/keyboard_bkg': 'game/keyboard_bkg.jpg',
-    'game/question_bkg_1': 'game/question_bkg_1.png',
-    'game/question_bkg_2': 'game/question_bkg_2.png',
     'game/space_bkg': 'game/space_bkg.png',
 };
 
