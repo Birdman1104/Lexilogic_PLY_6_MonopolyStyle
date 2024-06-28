@@ -55,8 +55,11 @@ export class BoardView extends Container {
             card.position.set(x, y);
             card.on('card_clicked', this.onCardClick);
             this.cards.push(card);
-            this.addChild(card);
         });
+
+        for (let i = this.cards.length - 1; i >= 0; i--) {
+            this.addChild(this.cards[i]);
+        }
     }
 
     private onCardClick(uuid): void {

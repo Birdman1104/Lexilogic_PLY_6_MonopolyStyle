@@ -188,3 +188,16 @@ export const drawBounds = (container: any, color = 0xffffff * Math.random(), alp
     container.addChild(gr);
     return gr;
 };
+
+export function fitText(textGameObject, width, height) {
+    const { width: textWidth, height: textHeight } = textGameObject;
+    const { fontSize } = textGameObject.style;
+    const ratioW = width ? width / textWidth : 1;
+    const ratioH = height ? height / textHeight : 1;
+    const ratio = Math.min(Math.min(ratioW, ratioH), 1);
+
+    if (typeof fontSize === 'number') {
+        const newFontSize = fontSize * ratio;
+        textGameObject.style.fontSize = newFontSize;
+    }
+}

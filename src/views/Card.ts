@@ -1,11 +1,14 @@
 import anime from 'animejs';
 import { Container, Sprite, Text } from 'pixi.js';
+import { Images } from '../assets';
 import { DEFAULT_FONT } from '../configs/GameConfig';
-import { GENERATED_TEXTURES } from '../configs/constants';
-import { callIfExists, makeSprite } from '../utils';
+import { CARD_HEIGHT, CARD_WIDTH, GENERATED_TEXTURES, OFFSET_TOP } from '../configs/constants';
+import { callIfExists, fitText, makeSprite } from '../utils';
 import { InputArea } from './InputArea';
 
 export class Card extends Container {
+    private grayArrow: Sprite;
+    private greenArrow: Sprite;
     private bkg: Sprite;
     private bkgSelected: Sprite;
     private number: Text;
@@ -63,6 +66,13 @@ export class Card extends Container {
             easing: 'easeInOutSine',
             complete: () => callIfExists(cb),
         });
+        anime({
+            targets: this.greenArrow,
+            alpha: 1,
+            duration: 300,
+            easing: 'easeInOutSine',
+            complete: () => callIfExists(cb),
+        });
     }
 
     public updateNumber(newNumber: number): void {
@@ -88,6 +98,7 @@ export class Card extends Container {
     private build(): void {
         this.buildBkg();
         this.buildBkgCopy();
+        this.buildArrows();
         this.buildNumber();
         this.buildQuestion();
     }
@@ -107,6 +118,54 @@ export class Card extends Container {
         this.bkgSelected.anchor.set(0.5, 0.5);
         this.bkgSelected.alpha = 0;
         this.addChild(this.bkgSelected);
+    }
+
+    private buildArrows(): void {
+        if (this.config.i === 0) {
+            this.buildFunctionalArrows();
+        } else {
+            this.hardcodeArrows();
+        }
+    }
+
+    private buildFunctionalArrows(): void {
+        const { x, y, scaleX, angle } = this.getArrowConfig();
+        this.grayArrow = makeSprite({ texture: Images['game/arrow'] });
+        this.grayArrow.tint = 0x5c5c5c;
+        this.grayArrow.position.set(x, y);
+        this.grayArrow.scale.set(scaleX, 1);
+        this.grayArrow.angle = angle;
+        this.addChild(this.grayArrow);
+
+        this.greenArrow = makeSprite({ texture: Images['game/arrow'] });
+        this.greenArrow.tint = 0x00ff00;
+        this.greenArrow.position.set(x, y);
+        this.greenArrow.scale.set(scaleX, 1);
+        this.greenArrow.angle = angle;
+        this.greenArrow.alpha = 0;
+        this.addChild(this.greenArrow);
+    }
+
+    private hardcodeArrows(): void {
+        const { i, j } = this.config;
+        if ((i === 1 || i === 2) && j === 2) return;
+        const { x, y, scaleX, angle } = this.getArrowConfig();
+
+        const arrow = makeSprite({ texture: Images['game/arrow'] });
+        arrow.tint = 0x5c5c5c;
+        arrow.position.set(x, y);
+        arrow.scale.set(scaleX, 1);
+        arrow.angle = angle;
+        this.addChild(arrow);
+
+        if (this.config.i === 1 && this.config.j === 0) {
+            const additionalArrow = makeSprite({ texture: Images['game/arrow'] });
+            additionalArrow.tint = 0x5c5c5c;
+            additionalArrow.position.set(90, (CARD_HEIGHT + OFFSET_TOP) / 2);
+            additionalArrow.scale.set(scaleX, 1);
+            additionalArrow.angle = -90;
+            this.addChild(additionalArrow);
+        }
     }
 
     private buildNumber(): void {
@@ -136,8 +195,10 @@ export class Card extends Container {
             align: 'center',
         });
         this.question.anchor.set(0.5);
-        this.question.position.set(0, 45);
+        this.question.position.set(0, 35);
         this.addChild(this.question);
+
+        fitText(this.question, CARD_WIDTH * 0.9, CARD_HEIGHT * 0.5);
     }
 
     private hideQuestion(): void {
@@ -160,5 +221,34 @@ export class Card extends Container {
             duration: 300,
             easing: 'easeInOutSine',
         });
+    }
+
+    private getArrowConfig(): { x: number; y: number; scaleX: number; angle: number; quantity: number } {
+        const { i, j } = this.config;
+        let x = 0;
+        let y = 0;
+        let scaleX = 1;
+        let angle = 0;
+        let quantity = 1;
+
+        if (i === 0 && j !== 2) {
+            x = 155;
+        } else if (j === 2 && i === 0) {
+            angle = 90;
+            x = -90;
+            y = (CARD_HEIGHT + OFFSET_TOP) / 2;
+        }
+
+        if (i === 1 && (j === 0 || j === 1)) {
+            x = 155;
+            scaleX = -1;
+        } else if (i === 2 && j !== 2) {
+            x = 155;
+        }
+        // } else if (i === 2 && j === 2) {
+        //     scaleX = 0;
+        // }
+
+        return { x, y, scaleX, angle, quantity };
     }
 }

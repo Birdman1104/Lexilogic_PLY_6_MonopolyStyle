@@ -2,6 +2,7 @@
 
 export const assets = {
     images: {
+        'game/arrow.png': require('../assets/images/game/arrow.png').default,
         'game/backspace.png': require('../assets/images/game/backspace.png').default,
         'game/backspace_bkg.png': require('../assets/images/game/backspace_bkg.png').default,
         'game/enter.png': require('../assets/images/game/enter.png').default,
@@ -19,6 +20,7 @@ export const assets = {
 };
 
 export const Images = {
+    'game/arrow': 'game/arrow.png',
     'game/backspace': 'game/backspace.png',
     'game/backspace_bkg': 'game/backspace_bkg.png',
     'game/enter': 'game/enter.png',
