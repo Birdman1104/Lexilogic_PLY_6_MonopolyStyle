@@ -1,6 +1,7 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
-import { Graphics, SCALE_MODES, Sprite } from 'pixi.js';
+import { Graphics, SCALE_MODES, Sprite, Text } from 'pixi.js';
+import { DEFAULT_FONT } from '../configs/GameConfig';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { AdModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { AdStatus } from '../models/AdModel';
@@ -38,6 +39,16 @@ export class ForegroundView extends PixiGrid {
     private build(): void {
         this.buildKeyboardBkg();
         this.buildKeyboard();
+        this.buildTitle();
+    }
+
+    private buildTitle(): void {
+        const title = new Text('Name 5 Game!', {
+            fontFamily: DEFAULT_FONT,
+            fontSize: 64,
+            fontWeight: 900,
+        });
+        this.setChild('title', title);
     }
 
     private buildKeyboardBkg(): void {

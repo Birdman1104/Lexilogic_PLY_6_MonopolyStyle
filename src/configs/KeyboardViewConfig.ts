@@ -47,7 +47,7 @@ export const KEYBOARD_CONFIG = [
         { value: KEYS.O, x: 800 },
         { value: KEYS.P, x: 900 },
 
-        { value: KEYS.CLOSE, x: 1050 },
+        // { value: KEYS.CLOSE, x: 1050 },
     ],
 
     // SECOND ROW

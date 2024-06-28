@@ -13,6 +13,10 @@ const getForegroundGridLandscapeConfig = () => {
         bounds,
         cells: [
             {
+                name: 'title',
+                bounds: { x: 0.025, y: 0, width: 0.3, height: 0.4 },
+            },
+            {
                 name: 'keyboard',
                 bounds: { x: 0.05, y: 0.6, width: 0.9, height: 0.39 },
             },
@@ -41,6 +45,10 @@ const getForegroundGridPortraitConfig = () => {
         // debug: { color: 0xff5027 },
         bounds,
         cells: [
+            {
+                name: 'title',
+                bounds: { x: 0.05, y: 0, width: 0.9, height: 0.29 },
+            },
             {
                 name: 'keyboard',
                 bounds: { x: 0.05, y: 0.7, width: 0.9, height: 0.29 },
