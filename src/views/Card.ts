@@ -236,7 +236,7 @@ export class Card extends Container {
         } else if (j === 2 && i === 0) {
             angle = 90;
             x = -90;
-            y = (CARD_HEIGHT + OFFSET_TOP) / 2;
+            y = (CARD_HEIGHT + OFFSET_TOP) / 2 + 5;
         }
 
         if (i === 1 && (j === 0 || j === 1)) {
@@ -245,9 +245,6 @@ export class Card extends Container {
         } else if (i === 2 && j !== 2) {
             x = 155;
         }
-        // } else if (i === 2 && j === 2) {
-        //     scaleX = 0;
-        // }
 
         return { x, y, scaleX, angle, quantity };
     }

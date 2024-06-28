@@ -1,8 +1,8 @@
 import anime from 'animejs';
 import { Container, Sprite, Text } from 'pixi.js';
 import { DEFAULT_FONT } from '../configs/GameConfig';
-import { GENERATED_TEXTURES } from '../configs/constants';
-import { callIfExists, delayRunnable, makeSprite } from '../utils';
+import { GENERATED_TEXTURES, INPUT_HEIGHT, INPUT_WIDTH } from '../configs/constants';
+import { callIfExists, delayRunnable, fitText, makeSprite } from '../utils';
 
 export class InputArea extends Container {
     private bkg: Sprite;
@@ -19,6 +19,7 @@ export class InputArea extends Container {
 
     public setTypedText(text: string): void {
         this.typedText.text = text;
+        fitText(this.typedText, INPUT_WIDTH * 0.925, INPUT_HEIGHT);
         this.indicator.x = this.typedText.x + this.typedText.width / 2 + (text.length === 0 ? 0 : 5);
     }
 
