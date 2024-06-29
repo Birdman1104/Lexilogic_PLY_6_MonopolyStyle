@@ -1,13 +1,16 @@
 import { CARD_CONFIG } from '../configs/CardsConfig';
-import { CARDS_TO_OPEN } from '../configs/constants';
+import { CARDS_TO_SOLVE } from '../configs/constants';
 import { CardModel } from './CardModel';
 import { ObservableModel } from './ObservableModel';
+
+const CARDS_ORDER = [0, 1, 2, 5];
 
 export class BoardModel extends ObservableModel {
     private _activeCard: CardModel | null;
     private _cards: CardModel[] = [];
     private _typedText = '';
     private _isGameOver = false;
+    private solvedCards = 0;
 
     constructor() {
         super('BoardModel');
@@ -96,6 +99,10 @@ export class BoardModel extends ObservableModel {
     public completeActiveCard(): void {
         if (!this.activeCard) return;
         this.activeCard.completed = true;
+        this.solvedCards += 1;
+        if (this.solvedCards >= CARDS_TO_SOLVE) {
+            this._isGameOver = true;
+        }
     }
 
     public clearActiveCard(): void {
@@ -103,12 +110,7 @@ export class BoardModel extends ObservableModel {
     }
 
     public activateNextCard(): void {
-        const i = this._cards.indexOf(this.activeCard as CardModel);
-        if (i + 1 >= CARDS_TO_OPEN) {
-            this._isGameOver = true;
-            return;
-        }
-        const nextCard = this._cards[i + 1];
+        const nextCard = this._cards[CARDS_ORDER[this.solvedCards]];
         nextCard.setInteractivity(true);
         this.clearActiveCard();
     }

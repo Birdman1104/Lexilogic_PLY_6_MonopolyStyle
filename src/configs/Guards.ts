@@ -53,3 +53,7 @@ export const isGuessedAnswerGuard = (): boolean => {
 export const isRightKeyGuard = (key): boolean => {
     return Head.gameModel?.board?.activeCard?.rightAnswers[0].toLowerCase() === KEYS[key].toLowerCase();
 };
+
+export const isGameOverGuard = (): boolean => {
+    return Head.gameModel?.board?.isGameOver || false;
+};

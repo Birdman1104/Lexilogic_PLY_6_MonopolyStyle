@@ -1,5 +1,5 @@
 import { WORDS_TO_GUESS } from '../configs/constants';
-import { sample } from '../utils';
+import { difference, sample } from '../utils';
 import { ObservableModel } from './ObservableModel';
 
 export class CardModel extends ObservableModel {
@@ -10,6 +10,7 @@ export class CardModel extends ObservableModel {
     private _interactivity = false;
     private _guessedAnswers: string[] = [];
     private _hintWord: string;
+    private usedHintWords: string[] = [];
 
     constructor({ question, answers }: CardConfig, private _i: number, private _j: number) {
         super('CardModel');
@@ -71,7 +72,9 @@ export class CardModel extends ObservableModel {
 
     public decreaseAnswersRemaining(): void {
         this._answersRemaining -= 1;
-
+        const possibleHintWords = difference(this._answers, this.usedHintWords);
+        this._hintWord = sample(possibleHintWords);
+        this.usedHintWords.push(this._hintWord);
         if (this._answersRemaining === 0) {
             this.completed = true;
         }

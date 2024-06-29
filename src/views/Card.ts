@@ -30,7 +30,6 @@ export class Card extends Container {
 
     get hintLetter(): string {
         let letter = this.config.hintWord[this.inputArea.lettersTypes];
-        console.warn(this.config.hintWord.length, this.inputArea.lettersTypes);
 
         if (this.config.hintWord.length <= this.inputArea.lettersTypes) {
             letter = 'enter';
@@ -70,6 +69,7 @@ export class Card extends Container {
     }
 
     public hideContent(cb?): void {
+        this.bkg.interactive = false;
         anime({
             targets: [this.inputArea, this.number, this.bkgSelected],
             alpha: 0,

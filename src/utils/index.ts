@@ -205,3 +205,7 @@ export const fitText = (textGameObject: Text, width: number, height: number) => 
 export const sample = (arr: any[]): any => {
     return arr[Math.floor(Math.random() * arr.length)];
 };
+
+export const difference = (arrA: any[], arrB: any[]): any[] => {
+    return arrA.filter((x) => !arrB.includes(x));
+};

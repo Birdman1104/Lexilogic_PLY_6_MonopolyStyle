@@ -11,6 +11,7 @@ import {
     hasActiveCardGuard,
     hintModelGuard,
     hintParamGuard,
+    isGameOverGuard,
     isGuessedAnswerGuard,
     isRightAnswerGuard,
     soundParamGuard,
@@ -49,7 +50,7 @@ const initializeModelsCommand = (): void => {
         .guard(hintParamGuard)
         .execute(initializeHintModelCommand)
 
-        .guard(hintParamGuard)
+        .guard(hintParamGuard, lego.not(isGameOverGuard))
         .execute(startHintVisibilityTimerCommand);
 };
 
@@ -111,9 +112,14 @@ export const onAdStatusUpdateCommand = (status: AdStatus): void => {
 export const onCardClickCommand = (uuid: string): void => {
     lego.command
         //
+        .guard(isGameOverGuard)
+        .execute(takeToStoreCommand)
+
+        .guard(lego.not(isGameOverGuard))
         .payload(uuid)
         .execute(setActiveCardCommand)
 
+        .guard(lego.not(isGameOverGuard))
         .payload(GameState.Typing)
         .execute(setGameStateCommand);
 
@@ -188,8 +194,6 @@ const rightAnswerDetectedCommand = (): void => {
 };
 
 const wrongAnswerDetectedCommand = (): void => {
-    console.warn('wrongAnswerDetectedCommand');
-
     // lego.command
     //     //
     //     .payload(GameState.WrongAnswer)
@@ -197,8 +201,6 @@ const wrongAnswerDetectedCommand = (): void => {
 };
 
 export const onKeyClickedCommand = (key: KEYS): void => {
-    console.warn('onKeyClickedCommand');
-
     lego.command
 
         .guard(activeCardCompleted)
@@ -212,10 +214,8 @@ export const onKeyClickedCommand = (key: KEYS): void => {
         .execute(hideHintCommand)
         .guard(hintModelGuard)
         .execute(stopHintVisibilityTimerCommand)
-        .guard(hintModelGuard)
+        .guard(hintModelGuard, lego.not(isGameOverGuard))
         .execute(startHintVisibilityTimerCommand);
-    // .guard(hintModelGuard)
-    // .execute(destroyHintModelCommand);
 };
 
 const processKeyPress = (key: KEYS): void => {
@@ -260,11 +260,18 @@ const processKeyPress = (key: KEYS): void => {
 };
 
 export const onGameStateUpdateCommand = (state: GameState): void => {
-    console.warn(state);
-
     switch (state) {
         case GameState.Idle:
-            //
+            lego.command
+                .execute(rightAnswerDetectedCommand)
+
+                .guard(hintModelGuard)
+                .execute(hideHintCommand)
+                .guard(hintModelGuard)
+                .execute(stopHintVisibilityTimerCommand)
+
+                .guard(hintModelGuard, lego.not(isGameOverGuard))
+                .execute(startHintVisibilityTimerCommand);
             break;
         case GameState.Typing:
             lego.command
@@ -279,14 +286,26 @@ export const onGameStateUpdateCommand = (state: GameState): void => {
                 .guard(hintModelGuard)
                 .execute(stopHintVisibilityTimerCommand)
 
-                .guard(hintModelGuard)
+                .guard(hintModelGuard, lego.not(isGameOverGuard))
                 .execute(startHintVisibilityTimerCommand);
             break;
         case GameState.RightAnswer:
-            lego.command.execute(rightAnswerDetectedCommand);
+            lego.command
+                .execute(rightAnswerDetectedCommand)
+
+                .guard(hintModelGuard)
+                .execute(hideHintCommand)
+                .guard(hintModelGuard)
+                .execute(stopHintVisibilityTimerCommand);
             break;
         case GameState.WrongAnswer:
-            lego.command.execute(wrongAnswerDetectedCommand);
+            lego.command
+                .execute(wrongAnswerDetectedCommand)
+
+                .guard(hintModelGuard)
+                .execute(hideHintCommand)
+                .guard(hintModelGuard)
+                .execute(stopHintVisibilityTimerCommand);
             break;
         case GameState.Completed:
             lego.command.execute(completeActiveCardCommand);
@@ -296,22 +315,6 @@ export const onGameStateUpdateCommand = (state: GameState): void => {
         default:
             break;
     }
-    // if (state === GameState.Typing && hintModelGuard()) {
-    //     lego.command
-    //         //
-    //         .guard(hintModelGuard)
-    //         .payload(HintState.Letter)
-    //         .execute(setHintStateCommand)
-
-    //         .guard(hintModelGuard)
-    //         .execute(hideHintCommand)
-
-    //         .guard(hintModelGuard)
-    //         .execute(stopHintVisibilityTimerCommand)
-
-    //         .guard(hintModelGuard)
-    //         .execute(startHintVisibilityTimerCommand);
-    // }
 };
 
 export const resizeCommand = (): void => {
@@ -323,7 +326,7 @@ export const resizeCommand = (): void => {
         .guard(hintModelGuard)
         .execute(stopHintVisibilityTimerCommand)
 
-        .guard(hintModelGuard)
+        .guard(hintModelGuard, lego.not(isGameOverGuard))
         .execute(startHintVisibilityTimerCommand);
 };
 
