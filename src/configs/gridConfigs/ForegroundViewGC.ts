@@ -1,4 +1,4 @@
-import { CellScale } from '@armathai/pixi-grid';
+import { CellAlign, CellScale } from '@armathai/pixi-grid';
 import { lp } from '../../utils';
 
 export const getForegroundGridConfig = () => {
@@ -14,7 +14,8 @@ const getForegroundGridLandscapeConfig = () => {
         cells: [
             {
                 name: 'title',
-                bounds: { x: 0.025, y: 0.3, width: 0.3, height: 0.4 },
+                bounds: { x: 0.01, y: 0.3, width: 0.255, height: 0.4 },
+                align: CellAlign.center,
             },
             {
                 name: 'keyboard',
@@ -47,7 +48,7 @@ const getForegroundGridPortraitConfig = () => {
         cells: [
             {
                 name: 'title',
-                bounds: { x: 0.05, y: 0, width: 0.9, height: 0.29 },
+                bounds: { x: 0.025, y: 0.04, width: 0.95, height: 0.14 },
             },
             {
                 name: 'keyboard',

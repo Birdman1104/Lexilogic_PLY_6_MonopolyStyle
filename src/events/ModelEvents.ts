@@ -9,6 +9,7 @@ export const BoardModelEvents = {
     ActiveCardUpdate: 'BoardModelActiveCardUpdate',
     CardsUpdate: 'BoardModelCardsUpdate',
     TypedTextUpdate: 'BoardModelTypedTextUpdate',
+    IsGameOverUpdate: 'BoardModelIsGameOverUpdate',
 };
 
 export const CardModelEvents = {

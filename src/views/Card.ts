@@ -93,6 +93,8 @@ export class Card extends Container {
         this.bkg.interactive = true;
         this.number.style.fill = 0x000000;
         this.question.style.fill = 0x000000;
+
+        [this.bkg, this.number, this.question].forEach((el) => (el.alpha = 1));
     }
 
     private build(): void {
@@ -101,6 +103,8 @@ export class Card extends Container {
         this.buildArrows();
         this.buildNumber();
         this.buildQuestion();
+
+        [this.bkg, this.number, this.question].forEach((el) => (el.alpha = 0.8));
     }
 
     private buildBkg(): void {

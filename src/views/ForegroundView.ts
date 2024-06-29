@@ -1,7 +1,6 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
-import { Graphics, SCALE_MODES, Sprite, Text } from 'pixi.js';
-import { DEFAULT_FONT } from '../configs/GameConfig';
+import { Graphics, SCALE_MODES, Sprite } from 'pixi.js';
 import { getForegroundGridConfig } from '../configs/gridConfigs/ForegroundViewGC';
 import { AdModelEvents, GameModelEvents } from '../events/ModelEvents';
 import { AdStatus } from '../models/AdModel';
@@ -10,10 +9,12 @@ import { HintModel } from '../models/HintModel';
 import { tweenToCell } from '../utils';
 import { HintView } from './HintView';
 import { KeyboardView } from './KeyboardView';
+import { Title } from './Title';
 export class ForegroundView extends PixiGrid {
     private keyboardBkg: Sprite;
     private hint: HintView | null;
     private keyboard: KeyboardView;
+    private title: Title;
 
     constructor() {
         super();
@@ -43,12 +44,8 @@ export class ForegroundView extends PixiGrid {
     }
 
     private buildTitle(): void {
-        const title = new Text('Name 5 Game!', {
-            fontFamily: DEFAULT_FONT,
-            fontSize: 64,
-            fontWeight: 900,
-        });
-        this.setChild('title', title);
+        this.title = new Title();
+        this.setChild('title', this.title);
     }
 
     private buildKeyboardBkg(): void {

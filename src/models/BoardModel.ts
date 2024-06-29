@@ -1,4 +1,5 @@
 import { CARD_CONFIG } from '../configs/CardsConfig';
+import { CARDS_TO_OPEN } from '../configs/constants';
 import { CardModel } from './CardModel';
 import { ObservableModel } from './ObservableModel';
 
@@ -6,6 +7,7 @@ export class BoardModel extends ObservableModel {
     private _activeCard: CardModel | null;
     private _cards: CardModel[] = [];
     private _typedText = '';
+    private _isGameOver = false;
 
     constructor() {
         super('BoardModel');
@@ -35,6 +37,14 @@ export class BoardModel extends ObservableModel {
 
     set typedText(value: string) {
         this._typedText = value;
+    }
+
+    get isGameOver(): boolean {
+        return this._isGameOver;
+    }
+
+    set isGameOver(value: boolean) {
+        this._isGameOver = value;
     }
 
     public getCardByUuid(uuid: string): CardModel | undefined {
@@ -94,6 +104,10 @@ export class BoardModel extends ObservableModel {
 
     public activateNextCard(): void {
         const i = this._cards.indexOf(this.activeCard as CardModel);
+        if (i + 1 >= CARDS_TO_OPEN) {
+            this._isGameOver = true;
+            return;
+        }
         const nextCard = this._cards[i + 1];
         nextCard.setInteractivity(true);
         this.clearActiveCard();
