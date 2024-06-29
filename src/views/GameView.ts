@@ -3,10 +3,8 @@ import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import { Graphics } from 'pixi.js';
 import { CARD_HEIGHT, CARD_WIDTH, GENERATED_TEXTURES, INPUT_HEIGHT, INPUT_WIDTH } from '../configs/constants';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
-import { BoardModelEvents, GameModelEvents, HintModelEvents } from '../events/ModelEvents';
+import { GameModelEvents, HintModelEvents } from '../events/ModelEvents';
 import { BoardModel } from '../models/BoardModel';
-import { CardModel } from '../models/CardModel';
-import { GameState } from '../models/GameModel';
 import { HintState } from '../models/HintModel';
 import { BoardView } from './BoardView';
 
@@ -18,9 +16,7 @@ export class GameView extends PixiGrid {
         super();
 
         lego.event
-            .on(GameModelEvents.StateUpdate, this.onStateUpdate, this)
             .on(GameModelEvents.BoardUpdate, this.onBoardUpdate, this)
-            .on(BoardModelEvents.ActiveCardUpdate, this.onActiveCardUpdate, this)
             .on(HintModelEvents.StateUpdate, this.onHintStateUpdate, this);
         this.build();
     }
@@ -78,10 +74,6 @@ export class GameView extends PixiGrid {
         board ? this.buildBoard() : this.destroyBoard();
     }
 
-    private onStateUpdate(state: GameState): void {
-        // console.warn(state);
-    }
-
     private buildBoard() {
         this.board = new BoardView();
         this.setChild('board', this.board);
@@ -89,9 +81,5 @@ export class GameView extends PixiGrid {
 
     private destroyBoard(): void {
         this.board.destroy();
-    }
-
-    private onActiveCardUpdate(card: CardModel): void {
-        // card ? tweenToCell(this, this.board, 'board2') : tweenToCell(this, this.board, 'board');
     }
 }

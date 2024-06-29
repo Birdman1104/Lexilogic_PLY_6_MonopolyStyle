@@ -13,6 +13,7 @@ export class Card extends Container {
     private bkgSelected: Sprite;
     private number: Text;
     private question: Text;
+    private startText: Text;
     private inputArea: InputArea;
 
     private isSolved = false;
@@ -104,6 +105,10 @@ export class Card extends Container {
         this.buildNumber();
         this.buildQuestion();
 
+        if (this.config.i === 0 && this.config.j === 0) {
+            this.buildStartText();
+        }
+
         [this.bkg, this.number, this.question].forEach((el) => (el.alpha = 0.8));
     }
 
@@ -182,6 +187,18 @@ export class Card extends Container {
         this.number.anchor.set(0.5);
         this.number.position.set(0, -50);
         this.addChild(this.number);
+    }
+
+    private buildStartText(): void {
+        this.startText = new Text('START', {
+            fontFamily: DEFAULT_FONT,
+            fontSize: 48,
+            fontWeight: 900,
+            fill: 0x00ff00,
+        });
+        this.startText.anchor.set(0.5);
+        this.startText.position.set(0, -CARD_HEIGHT / 2 - this.startText.height / 2);
+        this.addChild(this.startText);
     }
 
     private buildInputArea(): void {
