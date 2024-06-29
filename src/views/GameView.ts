@@ -10,7 +10,6 @@ import { BoardView } from './BoardView';
 
 export class GameView extends PixiGrid {
     private board: BoardView;
-    private hintOnCard = true;
 
     constructor() {
         super();
@@ -30,7 +29,6 @@ export class GameView extends PixiGrid {
     }
 
     public rebuild(config?: ICellConfig | undefined): void {
-        this.hintOnCard && this.board?.rebuild();
         super.rebuild(this.getGridConfig());
     }
 
@@ -67,7 +65,7 @@ export class GameView extends PixiGrid {
     }
 
     private onHintStateUpdate(state: HintState): void {
-        this.hintOnCard = state !== HintState.Letter && state !== HintState.Disabled;
+        //
     }
 
     private onBoardUpdate(board: BoardModel | null): void {

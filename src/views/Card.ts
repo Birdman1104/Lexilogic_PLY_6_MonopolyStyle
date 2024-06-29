@@ -28,6 +28,16 @@ export class Card extends Container {
         return this.config.uuid;
     }
 
+    get hintLetter(): string {
+        let letter = this.config.hintWord[this.inputArea.lettersTypes];
+        console.warn(this.config.hintWord.length, this.inputArea.lettersTypes);
+
+        if (this.config.hintWord.length <= this.inputArea.lettersTypes) {
+            letter = 'enter';
+        }
+        return letter;
+    }
+
     public destroy(
         options?:
             | { children?: boolean | undefined; texture?: boolean | undefined; baseTexture?: boolean | undefined }
@@ -79,13 +89,13 @@ export class Card extends Container {
     public updateNumber(newNumber: number): void {
         anime({
             targets: this.number.scale,
-            x: 1.2,
-            y: 1.2,
-            duration: 100,
-            easing: 'easeInOutSine',
+            x: 1.3,
+            y: 1.3,
+            duration: 200,
+            easing: 'linear',
             complete: () => {
-                this.number.scale.set(1);
                 this.number.text = `${newNumber}`;
+                this.number.scale.set(1);
             },
         });
     }

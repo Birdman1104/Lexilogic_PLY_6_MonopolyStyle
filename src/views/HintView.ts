@@ -4,7 +4,7 @@ import { Container, Point, Sprite } from 'pixi.js';
 import { Images } from '../assets';
 import { GameModelEvents, HintModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
-import { makeSprite } from '../utils';
+import { getViewByProperty, makeSprite } from '../utils';
 
 export class HintView extends Container {
     private hand: Sprite;
@@ -106,21 +106,20 @@ export class HintView extends Container {
     }
 
     private getHintPosition(): Point[] {
-        return [new Point(0, 0)];
-        // return this.isTyping ? this.getKeyHintPositions() : this.getCardHintPositions();
+        return this.isTyping ? this.getKeyHintPositions() : this.getCardHintPositions();
     }
 
-    // private getCardHintPositions() {
-    //     const cardsCollection = getViewByProperty('viewName', 'CardsCollection');
-    //     const boardPos = cardsCollection.getHintPosition();
-    //     const pos = this.toLocal(boardPos);
-    //     return [pos];
-    // }
+    private getCardHintPositions() {
+        const board = getViewByProperty('viewName', 'BoardView');
+        const boardPos = board.getHintPosition();
+        const pos = this.toLocal(boardPos);
+        return [pos];
+    }
 
-    // private getKeyHintPositions() {
-    //     const keyboardView = getViewByProperty('viewName', 'KeyboardView');
-    //     const keyPos = keyboardView.getHintPosition();
-    //     const pos = this.toLocal(keyPos);
-    //     return [pos];
-    // }
+    private getKeyHintPositions() {
+        const keyboardView = getViewByProperty('viewName', 'KeyboardView');
+        const keyPos = keyboardView.getHintPosition();
+        const pos = this.toLocal(keyPos);
+        return [pos];
+    }
 }

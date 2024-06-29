@@ -116,10 +116,7 @@ export const onCardClickCommand = (uuid: string): void => {
 
         .payload(GameState.Typing)
         .execute(setGameStateCommand);
-    // if (rightsCountReached() ) {
-    //     lego.command.execute(takeToStoreCommand);
-    //     return;
-    // }
+
     // if (Head.gameModel?.state === GameState.WrongAnswer) return;
     // lego.command
     //     //
@@ -148,8 +145,6 @@ const clearActiveCardCommand = (title: string): void => Head.gameModel?.board?.c
 const clearTypedTextCommand = (): void => Head.gameModel?.board?.clearTypedText();
 const clearLastChar = (): void => Head.gameModel?.board?.clearLastChar();
 const decreaseRightAnswersRemainingCommand = (): void => Head.gameModel?.board?.activeCard?.decreaseAnswersRemaining();
-// const increaseWrongsCountCommand = (): void => Head.gameModel?.increaseWrongsCount();
-// const setCardSolvedCommand = (): void => Head.gameModel?.board?.cardSolved();
 const setGameStateCommand = (state: GameState): void => Head.gameModel?.setState(state);
 const showCtaCommand = (): void => Head.ad?.cta?.show();
 
@@ -197,8 +192,6 @@ const wrongAnswerDetectedCommand = (): void => {
 
     // lego.command
     //     //
-    //     .execute(increaseWrongsCountCommand)
-
     //     .payload(GameState.WrongAnswer)
     //     .execute(setGameStateCommand);
 };
@@ -213,17 +206,16 @@ export const onKeyClickedCommand = (key: KEYS): void => {
 
         .guard(lego.not(activeCardCompleted))
         .payload(key)
-        .execute(processKeyPress);
-    // lego.command
-    //     .guard(hintModelGuard)
-    //     .execute(hideHintCommand)
-    //     .guard(hintModelGuard)
-    //     .execute(stopHintVisibilityTimerCommand)
-    //     .guard(hintModelGuard)
-    //     .execute(destroyHintModelCommand)
+        .execute(processKeyPress)
 
-    //     .payload(key)
-    //     .execute(processKeyPress);
+        .guard(hintModelGuard)
+        .execute(hideHintCommand)
+        .guard(hintModelGuard)
+        .execute(stopHintVisibilityTimerCommand)
+        .guard(hintModelGuard)
+        .execute(startHintVisibilityTimerCommand);
+    // .guard(hintModelGuard)
+    // .execute(destroyHintModelCommand);
 };
 
 const processKeyPress = (key: KEYS): void => {
@@ -275,7 +267,20 @@ export const onGameStateUpdateCommand = (state: GameState): void => {
             //
             break;
         case GameState.Typing:
-            //
+            lego.command
+                //
+                .guard(hintModelGuard)
+                .payload(HintState.Letter)
+                .execute(setHintStateCommand)
+
+                .guard(hintModelGuard)
+                .execute(hideHintCommand)
+
+                .guard(hintModelGuard)
+                .execute(stopHintVisibilityTimerCommand)
+
+                .guard(hintModelGuard)
+                .execute(startHintVisibilityTimerCommand);
             break;
         case GameState.RightAnswer:
             lego.command.execute(rightAnswerDetectedCommand);

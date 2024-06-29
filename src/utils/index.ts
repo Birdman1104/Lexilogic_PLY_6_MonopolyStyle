@@ -1,5 +1,5 @@
 import anime from 'animejs';
-import { Graphics, Point, Rectangle, Sprite } from 'pixi.js';
+import { Graphics, Point, Rectangle, Sprite, Text } from 'pixi.js';
 
 export const lp = (l, p) => {
     const { clientWidth: w, clientHeight: h } = document.body;
@@ -189,7 +189,7 @@ export const drawBounds = (container: any, color = 0xffffff * Math.random(), alp
     return gr;
 };
 
-export function fitText(textGameObject, width, height) {
+export const fitText = (textGameObject: Text, width: number, height: number) => {
     const { width: textWidth, height: textHeight } = textGameObject;
     const { fontSize } = textGameObject.style;
     const ratioW = width ? width / textWidth : 1;
@@ -200,4 +200,8 @@ export function fitText(textGameObject, width, height) {
         const newFontSize = fontSize * ratio;
         textGameObject.style.fontSize = newFontSize;
     }
-}
+};
+
+export const sample = (arr: any[]): any => {
+    return arr[Math.floor(Math.random() * arr.length)];
+};

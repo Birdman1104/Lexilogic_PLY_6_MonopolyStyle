@@ -1,4 +1,5 @@
 import { WORDS_TO_GUESS } from '../configs/constants';
+import { sample } from '../utils';
 import { ObservableModel } from './ObservableModel';
 
 export class CardModel extends ObservableModel {
@@ -8,12 +9,14 @@ export class CardModel extends ObservableModel {
     private _completed = false;
     private _interactivity = false;
     private _guessedAnswers: string[] = [];
+    private _hintWord: string;
 
     constructor({ question, answers }: CardConfig, private _i: number, private _j: number) {
         super('CardModel');
 
         this._question = question;
         this._answers = answers;
+        this._hintWord = answers.includes('Almonds') ? 'Almonds' : sample(this._answers);
 
         this.makeObservable('_completed', '_answersRemaining', '_interactivity');
     }
@@ -28,6 +31,10 @@ export class CardModel extends ObservableModel {
 
     get question(): string {
         return this._question;
+    }
+
+    get hintWord(): string {
+        return this._hintWord;
     }
 
     get rightAnswers(): string[] {

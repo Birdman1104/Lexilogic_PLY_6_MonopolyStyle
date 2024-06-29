@@ -1,5 +1,5 @@
 import { lego } from '@armathai/lego';
-import { Container, Rectangle } from 'pixi.js';
+import { Container, Point, Rectangle } from 'pixi.js';
 import { CARD_HEIGHT, CARD_WIDTH, OFFSET_LEFT, OFFSET_TOP } from '../configs/constants';
 import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents, CardModelEvents, GameModelEvents } from '../events/ModelEvents';
@@ -10,6 +10,7 @@ import { Card } from './Card';
 export class BoardView extends Container {
     private cards: Card[] = [];
     private activeCard: Card | null;
+    private availableCard: Card | null;
 
     constructor() {
         super();
@@ -29,6 +30,15 @@ export class BoardView extends Container {
 
     get viewName() {
         return 'BoardView';
+    }
+
+    public getHintPosition(): Point {
+        const card = this.availableCard as Card;
+        return this.toGlobal(new Point(card.x + 80, card.y + 50));
+    }
+
+    public getHintLetter(): string {
+        return (this.activeCard as Card).hintLetter;
     }
 
     public getCardByUuid(uuid: string): Card | undefined {
@@ -72,8 +82,12 @@ export class BoardView extends Container {
 
     private activateCard(uuid: string): void {
         const card = this.getCardByUuid(uuid);
-        if (!card) return;
-        card.activate();
+        if (!card) {
+            this.availableCard = null;
+            return;
+        }
+        this.availableCard = card;
+        this.availableCard.activate();
     }
 
     private onActiveCardUpdate(activeCard: CardModel | null): void {

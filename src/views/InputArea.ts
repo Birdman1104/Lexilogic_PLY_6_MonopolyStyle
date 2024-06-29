@@ -17,6 +17,10 @@ export class InputArea extends Container {
         this.build();
     }
 
+    get lettersTypes(): number {
+        return this.typedText.text.length;
+    }
+
     public setTypedText(text: string): void {
         this.typedText.text = text;
         fitText(this.typedText, INPUT_WIDTH * 0.925, INPUT_HEIGHT);

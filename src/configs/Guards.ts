@@ -42,10 +42,6 @@ export const isTutorialMode = (): boolean => {
     return !!Head.gameModel?.isTutorial;
 };
 
-export const isTutorialCard = (title: string): boolean => {
-    return title === GAME_CONFIG.HintOnCard;
-};
-
 export const isRightAnswerGuard = (): boolean => {
     return Head.gameModel?.board?.isRightAnswer() || false;
 };
