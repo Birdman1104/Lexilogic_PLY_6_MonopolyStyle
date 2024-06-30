@@ -1,3 +1,5 @@
+import { GAME_CONFIG } from '../configs/GameConfig';
+import { delayRunnable, removeRunnable } from '../utils';
 import { CtaModel } from './CtaModel';
 import { HintModel } from './HintModel';
 import { ObservableModel } from './ObservableModel';
@@ -15,6 +17,8 @@ export class AdModel extends ObservableModel {
     private _sound: SoundModel | null = null;
     private _hint: HintModel | null = null;
     private _status: AdStatus = AdStatus.Unknown;
+
+    private idleTimer: any;
 
     public constructor() {
         super('AdModel');
@@ -89,5 +93,20 @@ export class AdModel extends ObservableModel {
     public destroySoundModel(): void {
         this._sound?.destroy();
         this._sound = null;
+    }
+
+    public startIdleTimer(): void {
+        this.idleTimer = delayRunnable(
+            GAME_CONFIG.IdleTime,
+            () => {
+                this._status = AdStatus.Cta;
+            },
+            this,
+        );
+    }
+
+    public stopIdleTimer(): void {
+        removeRunnable(this.idleTimer);
+        this.idleTimer = null;
     }
 }

@@ -3,6 +3,8 @@ export const GAME_CONFIG = Object.freeze({
     Hint: true,
     Sound: true,
 
+    IdleTime: 80, // Seconds. Если игрок бездействует столько секунд,игра идет в стор
+
     // Параметры для разных версий
     //
 
@@ -11,12 +13,12 @@ export const GAME_CONFIG = Object.freeze({
     // TopText: false,
 
     // 2action
-    CardsToSolve: 2,
-    TopText: false,
+    // CardsToSolve: 2,
+    // TopText: false,
 
     // 3action
-    // CardsToSolve: 3,
-    // TopText: false,
+    CardsToSolve: 3,
+    TopText: false,
 
     // 1action
     // CardsToSolve: 1,

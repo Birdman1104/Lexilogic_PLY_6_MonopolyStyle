@@ -6,6 +6,7 @@ import { HintState } from '../models/HintModel';
 import { unMapCommands } from './EventCommandPairs';
 import {
     activeCardCompleted,
+    adStatusCtaGuard,
     canClickEnterGuard,
     ctaModelGuard,
     gameModelGuard,
@@ -36,6 +37,10 @@ const initializeGameModelCommand = (): void => Head.initializeGameModel();
 const initializeCtaModelCommand = (): void => Head.ad?.initializeCtaModel();
 const initializeSoundModelCommand = (): void => Head.ad?.initializeSoundModel();
 const initializeHintModelCommand = (): void => Head.ad?.initializeHintModel();
+
+const startIdleTimerCommand = (): void => Head.ad?.startIdleTimer();
+const stopIdleTimerCommand = (): void => Head.ad?.stopIdleTimer();
+
 const setHintStateCommand = (state: HintState): void => Head.ad?.hint?.setState(state);
 const startHintVisibilityTimerCommand = (time?: number): void => Head.ad?.hint?.startVisibilityTimer(time);
 const stopHintVisibilityTimerCommand = (): void => Head.ad?.hint?.stopVisibilityTimer();
@@ -52,6 +57,8 @@ const initializeModelsCommand = (): void => {
 
         .guard(hintParamGuard)
         .execute(initializeHintModelCommand)
+
+        .execute(startIdleTimerCommand)
 
         .guard(hintParamGuard, lego.not(isGameOverGuard))
         .payload(0.0001)
@@ -105,7 +112,11 @@ export const onAdStatusUpdateCommand = (status: AdStatus): void => {
                 .execute(destroyHintModelCommand);
             break;
         case AdStatus.Cta:
-            lego.command.guard(gameModelGuard).execute(destroyGameModelCommand);
+            // lego.command.guard(gameModelGuard).execute(destroyGameModelCommand);
+            lego.command
+                //
+                .execute(takeToStoreCommand)
+                .execute(showCtaCommand);
 
             break;
         default:
@@ -116,14 +127,19 @@ export const onAdStatusUpdateCommand = (status: AdStatus): void => {
 export const onCardClickCommand = (uuid: string): void => {
     lego.command
         //
-        .guard(isGameOverGuard)
+
+        .guard(lego.not(adStatusCtaGuard))
+        .execute(stopIdleTimerCommand)
+        .execute(startIdleTimerCommand)
+
+        .guard(isGameOverGuard, adStatusCtaGuard)
         .execute(takeToStoreCommand)
 
-        .guard(lego.not(isGameOverGuard))
+        .guard(lego.not(isGameOverGuard), lego.not(adStatusCtaGuard))
         .payload(uuid)
         .execute(setActiveCardCommand)
 
-        .guard(lego.not(isGameOverGuard))
+        .guard(lego.not(isGameOverGuard), lego.not(adStatusCtaGuard))
         .payload(GameState.Typing)
         .execute(setGameStateCommand);
 };
@@ -165,6 +181,8 @@ export const onWrongAnimationCompleteCommand = (): void => {
 
 export const onCardCompleteAnimationCompleteCommand = (): void => {
     Head.gameModel?.board?.activateNextCard();
+
+    // lego.command.guard(isGameOverGuard).execute(showCtaCommand);
 };
 
 const addAnswerToGuessedListCommand = (): void => Head.gameModel?.board?.addAnswerToList();
@@ -187,6 +205,9 @@ const wrongAnswerDetectedCommand = (): void => {
 export const onKeyClickedCommand = (key: KEYS): void => {
     lego.command
         //
+        .execute(stopIdleTimerCommand)
+        .execute(startIdleTimerCommand)
+
         .payload(key)
         .guard(isTutorialModeGuard)
         .execute(tutorialKeyClickedCommand)

@@ -1,3 +1,4 @@
+import { AdStatus } from '../models/AdModel';
 import Head from '../models/HeadModel';
 import { GAME_CONFIG } from './GameConfig';
 import { KEYS } from './KeyboardViewConfig';
@@ -24,6 +25,10 @@ export const ctaModelGuard = (): boolean => {
 
 export const ctaVisibleGuard = (): boolean => {
     return !!Head.ad?.cta?.visible;
+};
+
+export const adStatusCtaGuard = (): boolean => {
+    return Head.ad?.status === AdStatus.Cta;
 };
 
 export const gameModelGuard = (): boolean => {

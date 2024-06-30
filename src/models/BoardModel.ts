@@ -74,7 +74,8 @@ export class BoardModel extends ObservableModel {
 
     public updateTypedText(keyCode: string): void {
         if (this._typedText.length === 16) return;
-        const char = KEYS[keyCode];
+
+        const char = keyCode === ' ' ? keyCode : KEYS[keyCode];
 
         this._typedText = `${this._typedText}${char}`;
     }
