@@ -45,7 +45,7 @@ export class HintView extends Container {
 
     private build(): void {
         this.hand = makeSprite({ texture: Images['game/hand'] });
-        this.hand.anchor.set(0.1, 0);
+        this.hand.anchor.set(0);
         this.addChild(this.hand);
     }
 

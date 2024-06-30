@@ -372,5 +372,5 @@ export const resizeCommand = (): void => {
 
 export const takeToStoreCommand = (): void => {
     // TODO после окончания игры все клики идут сюда
-    // console.warn(' TAKE ME TO STORE');
+    console.warn(' TAKE ME TO STORE');
 };
