@@ -3,11 +3,6 @@ export const CARD_CONFIG: CardConfig[][] = [
         {
             question: 'types of\nnuts',
             answers: [
-                'mm',
-                'nn',
-                'bb',
-                'vv',
-                'cc',
                 'Almonds',
                 'Walnuts',
                 'Cashews',
@@ -34,11 +29,6 @@ export const CARD_CONFIG: CardConfig[][] = [
         {
             question: 'birds',
             answers: [
-                'mm',
-                'nn',
-                'bb',
-                'vv',
-                'cc',
                 'Eagle',
                 'Robin',
                 'Cardinal',
@@ -64,11 +54,6 @@ export const CARD_CONFIG: CardConfig[][] = [
         {
             question: 'common\nillness',
             answers: [
-                'mm',
-                'nn',
-                'bb',
-                'vv',
-                'cc',
                 'Cold',
                 'Flu',
                 'Strep',
