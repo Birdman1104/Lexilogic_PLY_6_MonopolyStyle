@@ -235,7 +235,11 @@ const processKeyPress = (key: KEYS): void => {
             lego.command
                 //
                 .payload(' ')
-                .guard(hasActiveCardGuard, isRightKeyGuard)
+                .guard(hasActiveCardGuard, isTutorialModeGuard, isRightKeyGuard)
+                .execute(updateTypedTextCommand)
+                //
+                .payload(' ')
+                .guard(hasActiveCardGuard, lego.not(isTutorialModeGuard))
                 .execute(updateTypedTextCommand);
             break;
         case KEYS.CLOSE:
@@ -246,16 +250,29 @@ const processKeyPress = (key: KEYS): void => {
         case KEYS.BACKSPACE:
             lego.command
                 //
-                .guard(hasActiveCardGuard)
+                .guard(hasActiveCardGuard, lego.not(isTutorialModeGuard))
                 .execute(clearLastChar);
             break;
         case KEYS.ENTER:
             lego.command
-                .guard(lego.not(isRightAnswerGuard), lego.not(isGuessedAnswerGuard), canClickEnterGuard)
+                .guard(
+                    lego.not(isRightAnswerGuard),
+                    isTutorialModeGuard,
+                    lego.not(isGuessedAnswerGuard),
+                    canClickEnterGuard,
+                )
                 .payload(GameState.WrongAnswer)
                 .execute(setGameStateCommand)
 
-                .guard(isRightAnswerGuard, canClickEnterGuard)
+                .guard(isRightAnswerGuard, isTutorialModeGuard, canClickEnterGuard)
+                .payload(GameState.RightAnswer)
+                .execute(setGameStateCommand)
+
+                .guard(lego.not(isRightAnswerGuard), lego.not(isTutorialModeGuard), lego.not(isGuessedAnswerGuard))
+                .payload(GameState.WrongAnswer)
+                .execute(setGameStateCommand)
+
+                .guard(isRightAnswerGuard, lego.not(isTutorialModeGuard))
                 .payload(GameState.RightAnswer)
                 .execute(setGameStateCommand);
 
@@ -264,7 +281,11 @@ const processKeyPress = (key: KEYS): void => {
             lego.command
                 //
                 .payload(key)
-                .guard(hasActiveCardGuard, isRightKeyGuard)
+                .guard(hasActiveCardGuard, isTutorialModeGuard, isRightKeyGuard)
+                .execute(updateTypedTextCommand)
+
+                .payload(key)
+                .guard(hasActiveCardGuard, lego.not(isTutorialModeGuard))
                 .execute(updateTypedTextCommand);
             break;
     }

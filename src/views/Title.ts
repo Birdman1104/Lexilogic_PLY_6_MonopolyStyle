@@ -1,5 +1,6 @@
 import { Container, Text } from 'pixi.js';
-import { DEFAULT_FONT } from '../configs/GameConfig';
+import { DEFAULT_FONT, GAME_CONFIG } from '../configs/GameConfig';
+import { NORMAL_TITLE, TOP_TITLE } from '../configs/constants';
 
 export class Title extends Container {
     private title: Text;
@@ -11,7 +12,8 @@ export class Title extends Container {
     }
 
     private build(): void {
-        this.title = new Text('Name 5 Game!', {
+        const text = GAME_CONFIG.TopText ? TOP_TITLE : NORMAL_TITLE;
+        this.title = new Text(text, {
             fontFamily: DEFAULT_FONT,
             fontSize: 64,
             fontWeight: 900,

@@ -1,6 +1,6 @@
 import { CARD_CONFIG } from '../configs/CardsConfig';
+import { GAME_CONFIG } from '../configs/GameConfig';
 import { KEYS } from '../configs/KeyboardViewConfig';
-import { CARDS_TO_SOLVE } from '../configs/constants';
 import { CardModel } from './CardModel';
 import { ObservableModel } from './ObservableModel';
 
@@ -102,7 +102,7 @@ export class BoardModel extends ObservableModel {
         if (!this.activeCard) return;
         this.activeCard.completed = true;
         this.solvedCards += 1;
-        if (this.solvedCards >= CARDS_TO_SOLVE) {
+        if (this.solvedCards >= GAME_CONFIG.CardsToSolve) {
             this._isGameOver = true;
         }
     }
