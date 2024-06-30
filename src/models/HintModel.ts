@@ -48,8 +48,8 @@ export class HintModel extends ObservableModel {
         this.visible = value;
     }
 
-    public startVisibilityTimer(): void {
-        this.visibilityTimer = delayRunnable(GAME_CONFIG.HintOnIdle, () => (this._visible = true), this);
+    public startVisibilityTimer(time?: number): void {
+        this.visibilityTimer = delayRunnable(time || GAME_CONFIG.HintOnIdle, () => (this._visible = true), this);
     }
 
     public stopVisibilityTimer(): void {

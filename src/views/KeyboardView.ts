@@ -26,7 +26,6 @@ export class KeyboardView extends Container {
         const board = getViewByProperty('viewName', 'BoardView');
         const letter = board.getHintLetter();
         const key = this.keys.find((k) => k.value.toLowerCase() === letter.toLowerCase()) || this.keys[10];
-
         return this.toGlobal(new Point(key.x + key.width / 2, key.y + key.height / 2));
     }
 

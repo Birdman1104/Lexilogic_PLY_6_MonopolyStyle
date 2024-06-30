@@ -1,4 +1,5 @@
 import { CARD_CONFIG } from '../configs/CardsConfig';
+import { KEYS } from '../configs/KeyboardViewConfig';
 import { CARDS_TO_SOLVE } from '../configs/constants';
 import { CardModel } from './CardModel';
 import { ObservableModel } from './ObservableModel';
@@ -71,8 +72,9 @@ export class BoardModel extends ObservableModel {
         this.activeCard?.addToGuessedAnswers(this.typedText.toLowerCase());
     }
 
-    public updateTypedText(char: string): void {
+    public updateTypedText(keyCode: string): void {
         if (this._typedText.length === 16) return;
+        const char = KEYS[keyCode];
 
         this._typedText = `${this._typedText}${char}`;
     }

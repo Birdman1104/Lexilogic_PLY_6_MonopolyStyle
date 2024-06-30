@@ -38,7 +38,7 @@ export const activeCardCompleted = (): boolean => {
     return Head.gameModel?.board?.activeCard?.completed || false;
 };
 
-export const isTutorialMode = (): boolean => {
+export const isTutorialModeGuard = (): boolean => {
     return !!Head.gameModel?.isTutorial;
 };
 
@@ -50,8 +50,19 @@ export const isGuessedAnswerGuard = (): boolean => {
     return Head.gameModel?.board?.isGuessedAnswer() || false;
 };
 
-export const isRightKeyGuard = (key): boolean => {
-    return Head.gameModel?.board?.activeCard?.rightAnswers[0].toLowerCase() === KEYS[key].toLowerCase();
+export const isRightKeyGuard = (key: KEYS | string): boolean => {
+    if (key === ' ') return false;
+
+    if (!Head.gameModel?.board) return false;
+    const { activeCard, typedText } = Head.gameModel?.board;
+    if (!activeCard?.hintWord[typedText.length]) return false;
+    return activeCard?.hintWord[typedText.length].toLowerCase() === KEYS[key].toLowerCase();
+};
+
+export const canClickEnterGuard = (): boolean => {
+    if (!Head.gameModel?.board) return false;
+    const { activeCard, typedText } = Head.gameModel?.board;
+    return activeCard?.hintWord.length === typedText.length;
 };
 
 export const isGameOverGuard = (): boolean => {
